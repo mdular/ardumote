@@ -117,13 +117,40 @@ void sendToComModules(long nV) {
 }
 
 void processCommand(char* s) {
+  /*
   Serial.println(s);
+  long controllerID = 0;
+  long p1 = 0;
+  long p2 = 0;
+  long p3 = 0;
+  long p4 = 0;
+  long p5 = 0;
+  char md5[32];
+  
+  char* tmp[12];
+  int pos = 0;
+  int part = 0;
+  for (int i = 0; i< 100; i++) {
+    if (s[i] == '\0') {
+      tmp[pos] = '\0';
+      break;
+    } else if (s[i] == ':') {
+      tmp[pos] = '\0';
+    } else {
+      tmp[pos++] = s[i];
+      if (pos > 11) {
+        return false;
+      }
+    }
+  }
+
   if (strcmp(s, "on") == 0) {
     Serial.println("exec");
-    Actors[2]->exec(5396 );
+    Actors[2]->exec(5471 );
   } else {
-    Actors[2]->exec(5393 );    
+    Actors[2]->exec(5396 );    
   }
+  */
 }
 
 
