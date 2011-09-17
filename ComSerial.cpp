@@ -21,7 +21,7 @@ bool ComSerial::available() {
 			sReturnCommand[nCommandBufferPos++] = c;
 		}
 	}
-	if (nCommandBufferPos > 40) {
+	if (nCommandBufferPos > 190) {
 		nCommandBufferPos = 0;
 	}
 	return false;
