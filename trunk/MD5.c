@@ -300,7 +300,7 @@ Called from Arduino it takes the char array and the length of the
 char array (without the '\0' NULL at the end) and stores the result
 inside the static variable MD5Digest[16], an unsigned char[] declared
 at the top of this file. */
-void MD5(unsigned char strInputString[], unsigned int len){
+char* MD5(unsigned char strInputString[], unsigned int len){
 	
 	MD5_CTX ctx;
 	MD5Init(&ctx);
@@ -308,5 +308,16 @@ void MD5(unsigned char strInputString[], unsigned int len){
 	MD5Update(&ctx, strInputString, len);
 	MD5Final(MD5Digest, &ctx);
 
-
+	/* Modified by Suat http://sui.li
+	   convert to a "normal" char[33]+'\0' md5 string 
+	   and return this value */
+	char md5s[33];
+	int x = 0;
+	for (x=0; x<16; x++){
+		char tmp[16];
+		sprintf(tmp, "%.2X",MD5Digest[x]);
+		md5s[x*2] = tmp[0];
+		md5s[x*2+1] = tmp[1];
+	}	
+	return md5s;
 }

@@ -32,4 +32,4 @@ void MD5Update (MD5_CTX *, unsigned char *, unsigned int);
 void MD5Final (unsigned char [16], MD5_CTX *);
 
 /*Below added by MMoore http://mikestechspot.blogspot.com*/
-void MD5 (unsigned char [], unsigned int);
+char* MD5 (unsigned char [], unsigned int);
