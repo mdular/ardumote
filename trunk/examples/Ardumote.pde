@@ -1,4 +1,5 @@
 #include <RCSwitch.h>
+#include <MD5.c>
 
 #include <Ardumote.h>
 
@@ -63,7 +64,7 @@ void setup() {
   */
  
   // Sensors
-  s1.setInterval(10);
+  s1.setInterval(5);
   s1.setup(7);
   Sensors[numSensors++] = &s1;
 
@@ -110,40 +111,60 @@ void loop() {
 
 void sendToComModules(long nV) {
   for (int i = 0; i<numComModules; i++) {
-    char* v = ""; 
-    itoa(nV, v, 10);
+    char* v = "123456789012345"; 
+    ltoa(nV, v, 10);
     ComModules[i]->send(v);
   }
 }
 
-void processCommand(char* s) {
-  /*
-  Serial.println(s);
-  long controllerID = 0;
-  long p1 = 0;
-  long p2 = 0;
-  long p3 = 0;
-  long p4 = 0;
-  long p5 = 0;
-  char md5[32];
+char* long2string(long l) {
+  char* r[13];
   
-  char* tmp[12];
-  int pos = 0;
-  int part = 0;
-  for (int i = 0; i< 100; i++) {
-    if (s[i] == '\0') {
-      tmp[pos] = '\0';
-      break;
-    } else if (s[i] == ':') {
-      tmp[pos] = '\0';
-    } else {
-      tmp[pos++] = s[i];
-      if (pos > 11) {
-        return false;
-      }
-    }
+}
+
+void log(char* msg) {
+  Serial.println(msg);
+}
+
+void processCommand(char* s) {
+  printAvailableMemory();
+
+  char* md5calculated;
+  char md5[33];
+  int len = strlen(s);
+  
+  if (s[0] != '1' || s[1] != '*') {
+    log("unsupported protocol version");
+    return;
+  }
+  
+  if (len < 34) {
+    log("message too short");
+    return;
+  }
+  
+  int j=0;
+  for (int i = len-32; i<len; i++) {
+    md5[j++] = s[i];
+  }
+  md5[j] = '\0';
+  
+  unsigned char strToHash[201];
+  for (int i = 0; i<len-32; i++) {
+    strToHash[i] = s[i];
+    strToHash[i+1]='\0';
   }
 
+  md5calculated = MD5(strToHash, len-32);
+  if (strcmp(md5calculated, md5) != 0) {
+    log("invalid md5");
+    Serial.print("Expected: ");
+    Serial.println(md5calculated);
+//    return;
+  }
+  
+  
+/*
   if (strcmp(s, "on") == 0) {
     Serial.println("exec");
     Actors[2]->exec(5471 );

@@ -11,7 +11,7 @@ class ComSerial : public ComModule {
     bool send(char* sCommand); 
 
   private:
-    char sReturnCommand[50];
+    char sReturnCommand[200];
     int nCommandBufferPos;
     int bAvailable;
 };
