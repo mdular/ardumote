@@ -17,8 +17,8 @@ class ComEthernetIRC: public ComModule {
   private:
     //Client client;
     byte serverIP[4];
-    char sReturnCommand[50];
-    int nReturnCommandPos;
+    char sReturnCommand[201];
+    int nCommandBufferPos;
     bool bAvailable;
     void connect();
 };
