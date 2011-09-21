@@ -28,7 +28,7 @@
 
 
 byte mac[] = {  0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-byte ip[] = { 192,168,178,5 };
+byte ip[] = { 192,168,0,5 };
 byte server[] = { 192, 168, 1, 5 };
 
 
@@ -41,6 +41,7 @@ int numActors = 0;
 int numSensors = 0;
 
 ComSerial c1 = ComSerial();
+ComEthernetIRC c2 = ComEthernetIRC();
 
 SensorDigital s1 = SensorDigital();
 SensorAnalog s2 = SensorAnalog();
@@ -52,13 +53,16 @@ ActorRCSwitch a3 = ActorRCSwitch();
 
 void setup() {
   Serial.begin(9600);
+  Ethernet.begin(mac, ip);
   Serial.print("setup start.");
   // ComModules
 
   ComModules[numComModules++] = &c1;
-  /*
-    ComEthernetIRC c2 = ComEthernetIRC();
-    ComModules[numComModules++] = &c1;
+  
+  c2.setup(mac, ip, server);
+    
+    ComModules[numComModules++] = &c2;
+    /*
     ComEthernetHTTP c3 = ComEthernetHTTP();
     ComModules[numComModules++] = &c3;
   */
@@ -90,10 +94,10 @@ void loop() {
   for (int i = 0; i<numComModules; i++) {
     if (ComModules[i]->available() ) {
       char* command = ComModules[i]->read();
-      processCommand( command );
+      //processCommand( command );
 
       Serial.print("Command (Mod #");
-      Serial.print(0);
+      Serial.print(i);
       Serial.print("): ");
       Serial.println( command );
     }
