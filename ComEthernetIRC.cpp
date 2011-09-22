@@ -8,21 +8,24 @@ ComEthernetIRC::ComEthernetIRC() {
   
 }
 
-void ComEthernetIRC::setup(byte mac[6], byte ip[4], byte remoteIp[4]) {
+void ComEthernetIRC::setup() {
   nCommandBufferPos = 0;
   bAvailable = false;
-  this->connect();
   sReturnCommand[0] = '\0';
+  this->connect();  
 }
 
 void ComEthernetIRC::connect() {
+  for (int i = 0; i<10; i++) {
+    randomSeed(analogRead(0));
+    myNick[i] = (char)random(65,90);
+  }
+  myNick[10] = '\0';
+    
   if (client.connect()) {
     
     client.print("NICK ");
-    for (int i = 0; i<10; i++) {
-      randomSeed(analogRead(0));
-      client.print((char)random(65,90));
-    }
+    client.print(myNick);
     client.println();
     
     client.print("USER ardumote");
@@ -39,11 +42,12 @@ bool ComEthernetIRC::available() {
     if (client.connected()) {
       if (client.available()) {
         char c = client.read();
-        if (c == 13) {
+        if (c == '\n') {
           sReturnCommand[nCommandBufferPos] = '\0';
-          bAvailable = true;
-          return true;
-        } else {
+          Serial.println(sReturnCommand);
+          processIRCstr();
+          return bAvailable;
+        } else if (c!='\r') {
           sReturnCommand[nCommandBufferPos++] = c;
         }
       }
@@ -59,6 +63,39 @@ bool ComEthernetIRC::available() {
     return false;
 }
 
+void ComEthernetIRC::processIRCstr() {
+  char* pch;
+  char* msg;
+  pch = strtok (sReturnCommand, ":");
+  while (pch != NULL) {
+    if (strcmp(pch, "PING") == 0) {
+      client.println("PONG");
+      return;
+    }
+
+    msg = pch;
+    pch = strtok (NULL, " ");
+  }
+  
+  pch = strtok (sReturnCommand, " ");
+  while (pch != NULL) {
+    if (strcmp(pch, "PRIVMSG") == 0) {
+    Serial.print("sl:");
+      Serial.println(strlen(msg));
+      for (int i = 0; i < strlen(msg); i++) {
+        sReturnCommand[i] = msg[i];
+      }
+      sReturnCommand[strlen(msg)] = '\0';
+      bAvailable = true;
+      
+      return;
+    }
+    pch = strtok (NULL, " ");
+  }
+  
+  bAvailable = false;
+}
+
 char* ComEthernetIRC::read() {
   nCommandBufferPos = 0;
   bAvailable = false;
@@ -67,7 +104,7 @@ char* ComEthernetIRC::read() {
 
 bool ComEthernetIRC::send(char* sCommand) {
     if (client.connected()) {
-      client.print("PRIVMSG sui__ :");
+      client.print("PRIVMSG ardumote :");
       client.println(sCommand);
     } else {
       client.stop();

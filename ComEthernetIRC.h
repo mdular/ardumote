@@ -8,7 +8,7 @@ class ComEthernetIRC: public ComModule {
   public:
     ComEthernetIRC();
     
-    void setup(byte* mac, byte* ip, byte* remoteIp);
+    void setup();
     
     bool available();
     char* read();
@@ -21,4 +21,6 @@ class ComEthernetIRC: public ComModule {
     int nCommandBufferPos;
     bool bAvailable;
     void connect();
+    char myNick[11];
+    void processIRCstr();
 };
