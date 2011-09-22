@@ -29,106 +29,60 @@
 
 byte mac[] = {  0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 byte ip[] = { 192,168,0,5 };
-byte server[] = { 192, 168, 1, 5 };
 
 
-ComModule*    ComModules[5];
-ActorModule*  Actors[10];
-SensorModule* Sensors[10];
-
-int numComModules = 0;
-int numActors = 0;
-int numSensors = 0;
-
-ComSerial c1 = ComSerial();
+ComSerial      c1 = ComSerial();
 ComEthernetIRC c2 = ComEthernetIRC();
+/*
+SensorDigital  s1 = SensorDigital();
+SensorAnalog   s2 = SensorAnalog();
 
-SensorDigital s1 = SensorDigital();
-SensorAnalog s2 = SensorAnalog();
-
-ActorDigital a1 = ActorDigital();  
-ActorAnalog a2 = ActorAnalog();  
-ActorRCSwitch a3 = ActorRCSwitch();
-
+ActorDigital   a1 = ActorDigital();  
+ActorAnalog    a2 = ActorAnalog();  
+ActorRCSwitch  a3 = ActorRCSwitch();
+*/
+Ardumote myArdumote = Ardumote();
 
 void setup() {
   Serial.begin(9600);
-  Ethernet.begin(mac, ip);
-  Serial.print("setup start.");
-  // ComModules
+  delay(1000);
+  Serial.println("setup start.");
+  Ethernet.begin(mac, ip);  
 
-  ComModules[numComModules++] = &c1;
+  // === ComModules ===
+  myArdumote.addComModule(&c1);
   
-  c2.setup(mac, ip, server);
-    
-    ComModules[numComModules++] = &c2;
-    /*
-    ComEthernetHTTP c3 = ComEthernetHTTP();
-    ComModules[numComModules++] = &c3;
-  */
- 
-  // Sensors
+  c2.setup();  
+  myArdumote.addComModule(&c2);
+/* 
+  // === Sensors ===
   s1.setInterval(5);
   s1.setup(7);
-  Sensors[numSensors++] = &s1;
+  myArdumote.addSensorModule( &s1);
 
   s2.setInterval(20);
   s1.setup(A0);
-  Sensors[numSensors++] = &s2;
+  myArdumote.addSensorModule( &s2);
   
-  // Actors
+  // === Actors ===
   a1.setup(13);
-  Actors[numActors++] = &a1;
+  myArdumote.addActorModule( &a1);
 
   a2.setup(5);
-  Actors[numActors++] = &a2;
+  myArdumote.addActorModule( &a2);
 
   a3.setup(7);
-  Actors[numActors++] = &a3;
-
+  myArdumote.addActorModule( &a3);
+*/
   Serial.println("setup done");
 }
 
 void loop() {
-  // Com
-  for (int i = 0; i<numComModules; i++) {
-    if (ComModules[i]->available() ) {
-      char* command = ComModules[i]->read();
-      //processCommand( command );
-
-      Serial.print("Command (Mod #");
-      Serial.print(i);
-      Serial.print("): ");
-      Serial.println( command );
-    }
-  }
-
-  // Sensor
-  for (int i = 0; i<numSensors; i++) {
-    if (Sensors[i]->available()) {
-      int nV = Sensors[i]->getValue();
-      sendToComModules( nV );
-    }
-  }
+  myArdumote.loop();
 }
 
 
-void sendToComModules(long nV) {
-  for (int i = 0; i<numComModules; i++) {
-    char* v = "123456789012345"; 
-    ltoa(nV, v, 10);
-    ComModules[i]->send(v);
-  }
-}
 
-char* long2string(long l) {
-  char* r[13];
-  
-}
-
-void log(char* msg) {
-  Serial.println(msg);
-}
 
 void processCommand(char* s) {
   printAvailableMemory();
@@ -138,12 +92,12 @@ void processCommand(char* s) {
   int len = strlen(s);
   
   if (s[0] != '1' || s[1] != '*') {
-    log("unsupported protocol version");
+    //log("unsupported protocol version");
     return;
   }
   
   if (len < 34) {
-    log("message too short");
+    //log("message too short");
     return;
   }
   
@@ -161,7 +115,7 @@ void processCommand(char* s) {
 
   md5calculated = MD5(strToHash, len-32);
   if (strcmp(md5calculated, md5) != 0) {
-    log("invalid md5");
+    //log("invalid md5");
     Serial.print("Expected: ");
     Serial.println(md5calculated);
 //    return;
@@ -179,7 +133,7 @@ void processCommand(char* s) {
 }
 
 
-int printAvailableMemory() {
+void printAvailableMemory() {
   int size = 2048; // Use 2048 with ATmega328
   byte *buf;
 
