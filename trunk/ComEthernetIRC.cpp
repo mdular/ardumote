@@ -60,7 +60,6 @@ bool ComEthernetIRC::available() {
         char c = client.read();
         if (c == '\n') {
           sReturnCommand[nCommandBufferPos] = '\0';
-          Serial.println(sReturnCommand);
           processIRCstr();
           return bAvailable;
         } else if (c!='\r') {
@@ -82,10 +81,13 @@ bool ComEthernetIRC::available() {
 void ComEthernetIRC::processIRCstr() {
   char* pch;
   char* msg;
+  
   pch = strtok (sReturnCommand, ":");
   while (pch != NULL) {
-    if (strcmp(pch, "PING") == 0) {
-      client.println("PONG");
+    if (strcmp(pch, "PING ") == 0) {
+      client.println("PONG :foo");
+      nCommandBufferPos = 0;
+      sReturnCommand[0] = '\0';      
       return;
     }
 
@@ -96,8 +98,6 @@ void ComEthernetIRC::processIRCstr() {
   pch = strtok (sReturnCommand, " ");
   while (pch != NULL) {
     if (strcmp(pch, "PRIVMSG") == 0) {
-    Serial.print("sl:");
-      Serial.println(strlen(msg));
       for (int i = 0; i < strlen(msg); i++) {
         sReturnCommand[i] = msg[i];
       }
@@ -108,14 +108,18 @@ void ComEthernetIRC::processIRCstr() {
     }
     pch = strtok (NULL, " ");
   }
-  
+  nCommandBufferPos = 0;
+  sReturnCommand[0] = '\0';   
   bAvailable = false;
 }
 
 char* ComEthernetIRC::read() {
+  char tmp[201];
+  strcpy(tmp, sReturnCommand);
   nCommandBufferPos = 0;
+  sReturnCommand[0] = '\0';
   bAvailable = false;
-  return sReturnCommand;
+  return tmp;
 }
 
 bool ComEthernetIRC::send(char* sCommand) {

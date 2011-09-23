@@ -319,5 +319,6 @@ char* MD5(unsigned char strInputString[], unsigned int len){
 		md5s[x*2] = tmp[0];
 		md5s[x*2+1] = tmp[1];
 	}	
+  md5s[32] = '\0';
 	return md5s;
 }

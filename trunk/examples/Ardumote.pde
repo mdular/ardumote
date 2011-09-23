@@ -1,6 +1,9 @@
-#include <RCSwitch.h>
-#include <MD5.c>
 
+// ==== General Includes ====
+#include <SPI.h>
+#include <Ethernet.h>
+#include <RCSwitch.h>
+#include <Time.h>
 #include <Ardumote.h>
 
 // ===== Com Modules =====
@@ -18,48 +21,50 @@
 #include <ActorRCSwitch.h>
 
 
-// Other stuff
-#include <SPI.h>
-#include <Ethernet.h>
-
-
-//#define ARDUMOTE_CONTROLLER_ID 1
 
 
 
-byte mac[] = {  0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-byte ip[] = { 192,168,0,5 };
+byte mac[]     = {  0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
+byte ip[]      = { 192,168,0,5 };
 
 
 ComSerial      c1 = ComSerial();
 ComEthernetIRC c2 = ComEthernetIRC();
-/*
-SensorDigital  s1 = SensorDigital();
+
+//SensorDigital  s1 = SensorDigital();
 SensorAnalog   s2 = SensorAnalog();
 
 ActorDigital   a1 = ActorDigital();  
+/*
 ActorAnalog    a2 = ActorAnalog();  
 ActorRCSwitch  a3 = ActorRCSwitch();
 */
-Ardumote myArdumote = Ardumote();
+Ardumote myArdumote = Ardumote( );
 
 void setup() {
+
   Serial.begin(9600);
   delay(1000);
   Serial.println("setup start.");
-  Ethernet.begin(mac, ip);  
+
+  Ethernet.begin(mac, ip);
+ 
+  // === Time ===
+  setSyncProvider(timeSync);  
+
+  myArdumote.setup(1, "123456");
 
   // === ComModules ===
   myArdumote.addComModule(&c1);
   
   c2.setup();  
   myArdumote.addComModule(&c2);
-/* 
+ 
   // === Sensors ===
-  s1.setInterval(5);
-  s1.setup(7);
-  myArdumote.addSensorModule( &s1);
-
+  s2.setInterval(10);
+  s2.setup(A1);
+  myArdumote.addSensorModule( &s2);
+/*
   s2.setInterval(20);
   s1.setup(A0);
   myArdumote.addSensorModule( &s2);
@@ -83,7 +88,7 @@ void loop() {
 
 
 
-
+/*
 void processCommand(char* s) {
   printAvailableMemory();
 
@@ -122,16 +127,16 @@ void processCommand(char* s) {
   }
   
   
-/*
+
   if (strcmp(s, "on") == 0) {
     Serial.println("exec");
     Actors[2]->exec(5471 );
   } else {
     Actors[2]->exec(5396 );    
   }
-  */
+  
 }
-
+*/
 
 void printAvailableMemory() {
   int size = 2048; // Use 2048 with ATmega328
@@ -145,3 +150,6 @@ void printAvailableMemory() {
   Serial.println(size);
 }
 
+time_t timeSync() {
+  return 0;
+}
