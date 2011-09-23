@@ -15,12 +15,12 @@ void Ardumote::addComModule(ComModule* m) {
 
 void Ardumote::addSensorModule(SensorModule* m) {
   if (numSensorModules < 5) {
-    SensorModules[numComModules++] = m;
+    SensorModules[numSensorModules++] = m;
   }
 }
 void Ardumote::addActorModule(ActorModule* m) {
   if (numActorModules < 5) {
-    ActorModules[numComModules++] = m;
+    ActorModules[numActorModules++] = m;
   }
 }
 

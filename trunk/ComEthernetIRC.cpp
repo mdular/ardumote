@@ -5,17 +5,29 @@ byte yserver[] = { 78,47,112,60};
 Client client ( yserver, 6667);
 
 ComEthernetIRC::ComEthernetIRC() {
-  
+  nStatusPin = NULL;
 }
 
 void ComEthernetIRC::setup() {
+  nStatusPin = 7;
   nCommandBufferPos = 0;
   bAvailable = false;
   sReturnCommand[0] = '\0';
+  
+  if (nStatusPin != NULL) {
+    pinMode(nStatusPin, OUTPUT);
+    digitalWrite(nStatusPin, LOW);
+  }
+  
   this->connect();  
+  
+  
 }
 
 void ComEthernetIRC::connect() {
+  if (nStatusPin != NULL) {
+    digitalWrite(nStatusPin, LOW);
+  }
   for (int i = 0; i<10; i++) {
     randomSeed(analogRead(0));
     myNick[i] = (char)random(65,90);
@@ -32,6 +44,10 @@ void ComEthernetIRC::connect() {
     client.print("1");
     client.println(" 8 * : Suat Oezguer");
     client.println("JOIN #test");
+    if (nStatusPin != NULL) {
+      digitalWrite(nStatusPin, HIGH);
+    }
+
   } 
 }
 
