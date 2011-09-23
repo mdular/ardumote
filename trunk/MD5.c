@@ -311,7 +311,7 @@ char* MD5(unsigned char strInputString[], unsigned int len){
 	/* Modified by Suat http://sui.li
 	   convert to a "normal" char[33]+'\0' md5 string 
 	   and return this value */
-	char md5s[33];
+	char md5s[32];
 	int x = 0;
 	for (x=0; x<16; x++){
 		char tmp[16];

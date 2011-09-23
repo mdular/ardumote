@@ -40,6 +40,8 @@ void Ardumote::loop() {
       Serial.print(i);
       Serial.print("): ");
       Serial.println( command );
+printAvailableMemory();	  
+	  processCommand(command);
     }
   }
   // Sensor
@@ -50,12 +52,97 @@ void Ardumote::loop() {
     }
   }  
 }
-/*
+
 void Ardumote::processCommand(char* s) {
+  if (strlen(s) > 235) {
+    return;  // command string is too long
+  } else if (strlen(s) < 35) {
+    return; // command string is too short
+  }
+  unsigned char strToHash[204];
+  char* pch;
+  long params[5];
+  char* md5 = "01234567890123456789012345678901";
+  md5[0] = '\0';
+  int actorID = NULL;
+  int paramCount = 0;
+  
+  for (int i = 0; i<strlen(s)-32; i++) {
+    strToHash[i] = s[i];
+  }
+  strToHash[strlen(s)-32] = '\0';
+  char* md5calc = MD5(strToHash, strlen(s)-32) ;
+  
+  
+  // Protocol version
+  pch = strtok (s, "*");
+  if ( (pch != NULL) && (strcmp(pch, "1") ==0) ) {
+  } else {
+	return;
+  }
+  
+  // Arduino Controler ID
+  pch = strtok (NULL, "*");
+  if ( (pch != NULL) && (atol(pch) == nArdumoteControllerID) ) { 
+  } else {
+	return;
+  }
+  
+  // ActorID
+  pch = strtok (NULL, "*");
+  if ( (pch != NULL) && (atoi(pch) < numActorModules) ) { 
+    actorID = atoi(pch);
+  } else {
+	return;
+  }
+  
+  // UTC
+  pch = strtok (NULL, "*");
+  if ( (pch != NULL)  ) { 
+  } else {
+	return;
+  }
+
+  // Params + md5
+  int i = 0;
+  while (pch!=NULL)  {
+     pch = strtok(NULL, "*");
+	 if (strlen(pch) == 32) {
+		strcpy(md5, pch);
+		break;
+	 } else if (strlen(pch) <=11 && i <= 4) {
+		params[i] = atol(pch);
+		paramCount++;
+	 } else {
+       return;  // invalid params
+	 }
+	 i++;
+  } 
+  
+  // md5
+  if (strcmp(md5, md5calc) == 0) {
+  } else {
+	return;
+  }
+  
+  if (paramCount == 5) {
+	ActorModules[ actorID ]->exec( params[0], params[1], params[2], params[3], params[4] );
+  } else if (paramCount == 4) {
+	ActorModules[ actorID ]->exec( params[0], params[1], params[2], params[3] );
+  } else if (paramCount == 3) {
+	ActorModules[ actorID ]->exec( params[0], params[1], params[2] );
+  } else if (paramCount == 2) {
+	ActorModules[ actorID ]->exec( params[0], params[1] );
+  } else if (paramCount == 1) {
+	ActorModules[ actorID ]->exec( params[0] );
+  } else {
+    
+  }
 }
-*/
+
 
 void Ardumote::sendValueToComModules(int number, long value) {
+
   char str[80];
   int j=0;
   
@@ -129,4 +216,19 @@ char* Ardumote::n2chars(int number) {
     char* v = "123456789012345"; 
     ltoa(number, v, 10);
     return v;
+}
+
+
+
+
+void Ardumote::printAvailableMemory() {
+  int size = 2048; // Use 2048 with ATmega328
+  byte *buf;
+
+  while ((buf = (byte *) malloc(--size)) == NULL)
+    ;
+
+  free(buf);
+  Serial.print("Memory: ");
+  Serial.println(size);
 }
