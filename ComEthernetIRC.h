@@ -23,4 +23,5 @@ class ComEthernetIRC: public ComModule {
     void connect();
     char myNick[11];
     void processIRCstr();
+    int nStatusPin;
 };
