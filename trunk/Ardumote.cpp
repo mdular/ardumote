@@ -107,7 +107,7 @@ void Ardumote::sendValueToComModules(int number, long value) {
     strToHash[k+i] = sSecret[i];
   }
   x = MD5(strToHash, k+strlen(sSecret));
-  for (int i = 0; i<strlen(x); i++) {
+  for (int i = 0; i<32; i++) {
     str[j++] = x[i];
   }
   str[j] = '\0';
