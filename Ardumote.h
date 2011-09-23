@@ -2,11 +2,12 @@
 #include <ComModule.h>
 #include <SensorModule.h>
 #include <ActorModule.h>
-
+ 
 class Ardumote {
 
   public:
     Ardumote();
+    void setup(long nControllerID, char* secret);
     void addComModule(ComModule* m);
     void addSensorModule(SensorModule* m);
     void addActorModule(ActorModule* m);
@@ -20,4 +21,8 @@ class Ardumote {
     uint8_t numComModules;
     uint8_t numSensorModules;
     uint8_t numActorModules;
+    long nArdumoteControllerID;
+    char* sSecret;
+    char* n2chars(long number);
+    char* n2chars(int number);
 };
