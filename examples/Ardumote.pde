@@ -3,7 +3,7 @@
 #include <SPI.h>
 #include <Ethernet.h>
 #include <RCSwitch.h>
-#include <Time.h>
+//#include <Time.h>
 #include <Ardumote.h>
 
 // ===== Com Modules =====
@@ -50,9 +50,9 @@ void setup() {
   Ethernet.begin(mac, ip);
  
   // === Time ===
-  setSyncProvider(timeSync);  
+//  setSyncProvider(timeSync);
 
-  myArdumote.setup(1, "123456");
+  myArdumote.setup(4, "a603a3c9aef87d0ccc5732385c08d692");
 
   // === ComModules ===
   myArdumote.addComModule(&c1);
@@ -61,7 +61,7 @@ void setup() {
   myArdumote.addComModule(&c2);
  
   // === Sensors ===
-  s2.setInterval(10);
+  s2.setInterval(5);
   s2.setup(A1);
   myArdumote.addSensorModule( &s2);
 /*
@@ -150,6 +150,7 @@ void printAvailableMemory() {
   Serial.println(size);
 }
 
-time_t timeSync() {
+
+/*time_t timeSync() {
   return 0;
-}
+}*/
