@@ -78,6 +78,7 @@ void Ardumote::processCommand(char* s) {
   pch = strtok (s, "*");
   if ( (pch != NULL) && (strcmp(pch, "1") ==0) ) {
   } else {
+	Serial.println("version fail");
 	return;
   }
   
@@ -85,6 +86,7 @@ void Ardumote::processCommand(char* s) {
   pch = strtok (NULL, "*");
   if ( (pch != NULL) && (atol(pch) == nArdumoteControllerID) ) { 
   } else {
+	Serial.println("controllerID fail");
 	return;
   }
   
@@ -93,6 +95,7 @@ void Ardumote::processCommand(char* s) {
   if ( (pch != NULL) && (atoi(pch) < numActorModules) ) { 
     actorID = atoi(pch);
   } else {
+	Serial.println("actorID fail");
 	return;
   }
   
@@ -100,6 +103,7 @@ void Ardumote::processCommand(char* s) {
   pch = strtok (NULL, "*");
   if ( (pch != NULL)  ) { 
   } else {
+	Serial.println("utc fail");
 	return;
   }
 
@@ -113,6 +117,7 @@ void Ardumote::processCommand(char* s) {
 	 } else if (strlen(pch) <=11 && i <= 4) {
 		params[i] = atol(pch);
 		paramCount++;
+		Serial.println("param++");
 	 } else {
        return;  // invalid params
 	 }
@@ -121,7 +126,11 @@ void Ardumote::processCommand(char* s) {
   
   // md5
   if (strcmp(md5, md5calc) == 0) {
+	Serial.println("md5 ok");
   } else {
+  Serial.print(md5calc);
+  Serial.print(" ");
+	Serial.println("md5 failed");
 	return;
   }
   
