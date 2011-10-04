@@ -5,29 +5,21 @@ byte yserver[] = { 78,47,112,60};
 Client client ( yserver, 6667);
 
 ComEthernetIRC::ComEthernetIRC() {
-  nStatusPin = NULL;
+
 }
 
 void ComEthernetIRC::setup() {
-  nStatusPin = 7;
-  nCommandBufferPos = 0;
-  bAvailable = false;
-  sReturnCommand[0] = '\0';
-  
-  if (nStatusPin != NULL) {
-    pinMode(nStatusPin, OUTPUT);
-    digitalWrite(nStatusPin, LOW);
-  }
-  
-  this->connect();  
-  
-  
+  connect();
+}
+
+void ComEthernetIRC::clearVars() {
+  nInBufferPos = 0;
+  sInBuffer[0] = '\0';
+  bAvailable = false; 
 }
 
 void ComEthernetIRC::connect() {
-  if (nStatusPin != NULL) {
-    digitalWrite(nStatusPin, LOW);
-  }
+  clearVars();
   for (int i = 0; i<10; i++) {
     randomSeed(analogRead(0));
     myNick[i] = (char)random(65,90);
@@ -35,19 +27,13 @@ void ComEthernetIRC::connect() {
   myNick[10] = '\0';
     
   if (client.connect()) {
-    
     client.print("NICK ");
     client.print(myNick);
     client.println();
-    
     client.print("USER ardumote");
     client.print("1");
     client.println(" 8 * : Suat Oezguer");
     client.println("JOIN #test");
-    if (nStatusPin != NULL) {
-      digitalWrite(nStatusPin, HIGH);
-    }
-
   } 
 }
 
@@ -59,18 +45,17 @@ bool ComEthernetIRC::available() {
       if (client.available()) {
         char c = client.read();
         if (c == '\n') {
-          sReturnCommand[nCommandBufferPos] = '\0';
+          sInBuffer[nInBufferPos] = '\0';
           processIRCstr();
           return bAvailable;
         } else if (c!='\r') {
-          sReturnCommand[nCommandBufferPos++] = c;
+          sInBuffer[nInBufferPos++] = c;
         }
       }
-      if (nCommandBufferPos > 190) {
-        nCommandBufferPos = 0;
+      if (nInBufferPos > 201) {
+        clearVars();
       }      
     } else {
-      nCommandBufferPos = 0;
       client.stop();
       delay(5000);
       connect();
@@ -79,52 +64,37 @@ bool ComEthernetIRC::available() {
 }
 
 void ComEthernetIRC::processIRCstr() {
-  char* pch;
-  char* msg;
-  
-  pch = strtok (sReturnCommand, ":");
-  while (pch != NULL) {
-    if (strcmp(pch, "PING ") == 0) {
-      client.println("PONG :foo");
-      nCommandBufferPos = 0;
-      sReturnCommand[0] = '\0';      
-      return;
-    }
+  if (sInBuffer[0] == 'P' && sInBuffer[1] == 'I' && sInBuffer[2] == 'N' && sInBuffer[3] == 'G') {
+    sInBuffer[1] = 'O';
+    client.println(sInBuffer);
+    clearVars();
+    Serial.println("PONG");
+    return;
+  }
+  Serial.println(sInBuffer);
 
-    msg = pch;
-    pch = strtok (NULL, " ");
-  }
-  
-  pch = strtok (sReturnCommand, " ");
-  while (pch != NULL) {
-    if (strcmp(pch, "PRIVMSG") == 0) {
-      for (int i = 0; i < strlen(msg); i++) {
-        sReturnCommand[i] = msg[i];
+  sReturnCommand = strstr (sInBuffer, "PRIVMSG");
+  if (sReturnCommand != NULL)  {
+    sReturnCommand = strstr( sReturnCommand, myNick);
+    if (sReturnCommand != NULL) {
+      sReturnCommand = strstr( sReturnCommand, ":")+1;
+      if (sReturnCommand != NULL) {
+        bAvailable = true;
       }
-      sReturnCommand[strlen(msg)] = '\0';
-      bAvailable = true;
-      
-      return;
     }
-    pch = strtok (NULL, " ");
   }
-  nCommandBufferPos = 0;
-  sReturnCommand[0] = '\0';   
-  bAvailable = false;
 }
 
 char* ComEthernetIRC::read() {
-  char tmp[201];
-  strcpy(tmp, sReturnCommand);
-  nCommandBufferPos = 0;
-  sReturnCommand[0] = '\0';
-  bAvailable = false;
-  return tmp;
+  clearVars();
+  return sReturnCommand;
 }
 
 bool ComEthernetIRC::send(char* sCommand) {
     if (client.connected()) {
       client.print("PRIVMSG ardumote :");
+      client.println(sCommand);
+      client.print("PRIVMSG #test :");
       client.println(sCommand);
     } else {
       client.stop();
