@@ -9,19 +9,20 @@ class ComEthernetIRC: public ComModule {
     ComEthernetIRC();
     
     void setup();
-    
     bool available();
     char* read();
     bool send(char* sCommand); 
 
   private:
-    //Client client;
-    byte serverIP[4];
-    char sReturnCommand[201];
-    int nCommandBufferPos;
+    char sInBuffer[201];
+    int  nInBufferPos;
     bool bAvailable;
+    
+    char* sReturnCommand;
+
     void connect();
     char myNick[11];
     void processIRCstr();
-    int nStatusPin;
+    void clearVars();
+
 };

@@ -1,6 +1,5 @@
 #include "Ardumote.h"
 #include <Time.h>
-#include <MD5.c>
 #include "WProgram.h"
   
 Ardumote::Ardumote() {
@@ -25,6 +24,7 @@ void Ardumote::addSensorModule(SensorModule* m) {
     SensorModules[numSensorModules++] = m;
   }
 }
+
 void Ardumote::addActorModule(ActorModule* m) {
   if (numActorModules < 5) {
     ActorModules[numActorModules++] = m;
@@ -40,8 +40,9 @@ void Ardumote::loop() {
       Serial.print(i);
       Serial.print("): ");
       Serial.println( command );
-printAvailableMemory();	  
-	  processCommand(command);
+      printAvailableMemory();    
+      parseInCmd(command);
+      processCommand();
     }
   }
   // Sensor
@@ -53,99 +54,100 @@ printAvailableMemory();
   }  
 }
 
-void Ardumote::processCommand(char* s) {
-  if (strlen(s) > 235) {
-    return;  // command string is too long
-  } else if (strlen(s) < 35) {
-    return; // command string is too short
+void Ardumote::parseInCmd(char* sCmd) {
+  for (int i = 0; i<10; i++) {
+    inCommand[i][0] = '\0';
   }
-  unsigned char strToHash[204];
+
+  int nNumber = 0;
   char* pch;
-  long params[5];
-  char* md5 = "01234567890123456789012345678901";
-  md5[0] = '\0';
-  int actorID = NULL;
-  int paramCount = 0;
   
-  for (int i = 0; i<strlen(s)-32; i++) {
-    strToHash[i] = s[i];
+  pch = strtok (sCmd, "*");
+  while (pch != NULL)  {
+    if (strlen(pch)<=32) {
+      strcpy(inCommand[nNumber++], pch);
+    } else {
+      strcpy(inCommand[nNumber++], "invalid");
+    }
+    pch = strtok (NULL, "*");
   }
-  strToHash[strlen(s)-32] = '\0';
-  char* md5calc = MD5(strToHash, strlen(s)-32) ;
+
+  /*
+  for (int i = 0; i<10; i++) {
+    Serial.print(i);
+    Serial.print(": ");
+    Serial.println(inCommand[i]);
+  }
+  */
   
+}
+
+void Ardumote::processCommand() {
+  long aParams[5];
+  long nActorID;
   
-  // Protocol version
-  pch = strtok (s, "*");
-  if ( (pch != NULL) && (strcmp(pch, "1") ==0) ) {
-  } else {
-	Serial.println("version fail");
-	return;
+  // Protocol Version
+  if (strcmp(inCommand[0], "1") != 0 ) {
+    log("Version failed");
+    return;
   }
   
-  // Arduino Controler ID
-  pch = strtok (NULL, "*");
-  if ( (pch != NULL) && (atol(pch) == nArdumoteControllerID) ) { 
-  } else {
-	Serial.println("controllerID fail");
-	return;
+  // Arduino Controller ID
+  if (atol(inCommand[1]) != nArdumoteControllerID) {
+    log("ControllerID failed"); 
   }
   
   // ActorID
-  pch = strtok (NULL, "*");
-  if ( (pch != NULL) && (atoi(pch) < numActorModules) ) { 
-    actorID = atoi(pch);
-  } else {
-	Serial.println("actorID fail");
-	return;
+  nActorID = atoi(inCommand[2]);
+  if (nActorID+1 > numActorModules) {
+    log("ActorID failed");
+    return;    
   }
   
   // UTC
-  pch = strtok (NULL, "*");
-  if ( (pch != NULL)  ) { 
-  } else {
-	Serial.println("utc fail");
-	return;
+  if (atol(inCommand[3]) == 0) {
+    log("UTC failed");
+    return;    
+  }
+  
+  // Params
+  int nParamCount = 0;
+  while (nParamCount < 5 && inCommand[4+nParamCount+1][0] != '\0') {
+    aParams[nParamCount] = atol( inCommand[4 + nParamCount] );
+    nParamCount++;
+  }
+  
+  // Auth
+  char strToHash[250];
+  int k = 0;
+  for (int i = 0; i< 4+nParamCount; i++) {
+    for (int j = 0; j<strlen(inCommand[i]); j++) {
+      strToHash[k++] = inCommand[i][j];
+    }
+    strToHash[k++] = '*';
+  }
+  strToHash[k] = '\0';
+  char* hash = this->getHash(strToHash);
+  if (strcmp(hash, inCommand[nParamCount+4]) != 0) {
+    log(hash);
+    log(inCommand[nParamCount+4]);
+    log("AuthString failed");
+    return;
   }
 
-  // Params + md5
-  int i = 0;
-  while (pch!=NULL)  {
-     pch = strtok(NULL, "*");
-	 if (strlen(pch) == 32) {
-		strcpy(md5, pch);
-		break;
-	 } else if (strlen(pch) <=11 && i <= 4) {
-		params[i] = atol(pch);
-		paramCount++;
-		Serial.println("param++");
-	 } else {
-       return;  // invalid params
-	 }
-	 i++;
-  } 
   
-  // md5
-  if (strcmp(md5, md5calc) == 0) {
-	Serial.println("md5 ok");
+  if (nParamCount == 5) {
+    ActorModules[ nActorID ]->exec( aParams[0], aParams[1], aParams[2], aParams[3], aParams[4] );
+  } else if (nParamCount == 4) {
+    ActorModules[ nActorID ]->exec( aParams[0], aParams[1], aParams[2], aParams[3] );
+  } else if (nParamCount == 3) {
+    ActorModules[ nActorID ]->exec( aParams[0], aParams[1], aParams[2] );
+  } else if (nParamCount == 2) {
+    ActorModules[ nActorID ]->exec( aParams[0], aParams[1] );
+  } else if (nParamCount == 1) {
+    ActorModules[ nActorID ]->exec( aParams[0] );
   } else {
-  Serial.print(md5calc);
-  Serial.print(" ");
-	Serial.println("md5 failed");
-	return;
-  }
-  
-  if (paramCount == 5) {
-	ActorModules[ actorID ]->exec( params[0], params[1], params[2], params[3], params[4] );
-  } else if (paramCount == 4) {
-	ActorModules[ actorID ]->exec( params[0], params[1], params[2], params[3] );
-  } else if (paramCount == 3) {
-	ActorModules[ actorID ]->exec( params[0], params[1], params[2] );
-  } else if (paramCount == 2) {
-	ActorModules[ actorID ]->exec( params[0], params[1] );
-  } else if (paramCount == 1) {
-	ActorModules[ actorID ]->exec( params[0] );
-  } else {
-    
+    log("no parameters");
   }
 }
 
@@ -191,23 +193,12 @@ void Ardumote::sendValueToComModules(int number, long value) {
   str[j] = '\0';
   
   // + secret + md5
-  unsigned char strToHash[80];
-  int k;
-  for (int i = 0; i<strlen(str); i++) {
-    strToHash[i] = str[i];
-    k=i;
-  }
-  k++;
-  
-  for (int i = 0; i<strlen(sSecret); i++) {
-    strToHash[k+i] = sSecret[i];
-  }
-  x = MD5(strToHash, k+strlen(sSecret));
-  for (int i = 0; i<32; i++) {
-    str[j++] = x[i];
+  char* hash = this->getHash(str);
+  for (int i = 0; i<strlen(hash); i++) {
+    str[j++] = hash[i];
   }
   str[j] = '\0';
-  
+
   // Send it :)
   for (int i = 0; i<numComModules; i++) {
     ComModules[i]->send(str);
@@ -227,6 +218,10 @@ char* Ardumote::n2chars(int number) {
     return v;
 }
 
+char* Ardumote::getHash(char* strToHash) {
+  return "Super";
+}
+
 
 
 
@@ -240,4 +235,8 @@ void Ardumote::printAvailableMemory() {
   free(buf);
   Serial.print("Memory: ");
   Serial.println(size);
+}
+
+void Ardumote::log(char* sMsg) {
+  Serial.println(sMsg);
 }
