@@ -42,6 +42,8 @@ class Ardumote {
     void printAvailableMemory();
     void log(char* sMsg);
     void parseInCmd(char* command);
+    
+    int nProtocolVersion;
 };
 
 

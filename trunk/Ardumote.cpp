@@ -6,6 +6,7 @@ Ardumote::Ardumote() {
   numComModules    = 0;
   numSensorModules = 0;
   numActorModules  = 0;
+  nProtocolVersion = 0;
 }
 
 void Ardumote::setup(long nControllerID, char* secret) {
@@ -89,7 +90,7 @@ void Ardumote::processCommand() {
   long nActorID;
   
   // Protocol Version
-  if (strcmp(inCommand[0], "1") != 0 ) {
+  if (atoi(inCommand[0]) != nProtocolVersion) {
     log("Version failed");
     return;
   }
@@ -162,7 +163,7 @@ void Ardumote::sendValueToComModules(int number, long value) {
   char* x;
 
   // Protocol version
-  str[j++] = '1';
+  str[j++] = (nProtocolVersion == 1 ? '1' : '2');   // ToDo: Obvious
   str[j++] = '*';
   
   // Arduino Controler ID
@@ -240,5 +241,5 @@ void Ardumote::printAvailableMemory() {
 }
 
 void Ardumote::log(char* sMsg) {
-  //Serial.println(sMsg);
+  Serial.println(sMsg);
 }

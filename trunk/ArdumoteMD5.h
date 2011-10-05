@@ -1,6 +1,6 @@
 #include <Ardumote.h>
  
-class ArdumotePlain: public Ardumote {
+class ArdumoteMD5: public Ardumote {
   public:
     void setup(long nControllerID, char* secret);
   protected:
