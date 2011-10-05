@@ -64,14 +64,13 @@ bool ComEthernetIRC::available() {
 }
 
 void ComEthernetIRC::processIRCstr() {
+  // PING/PONG
   if (sInBuffer[0] == 'P' && sInBuffer[1] == 'I' && sInBuffer[2] == 'N' && sInBuffer[3] == 'G') {
     sInBuffer[1] = 'O';
     client.println(sInBuffer);
     clearVars();
-    Serial.println("PONG");
     return;
   }
-  Serial.println(sInBuffer);
 
   sReturnCommand = strstr (sInBuffer, "PRIVMSG");
   if (sReturnCommand != NULL)  {
@@ -80,9 +79,11 @@ void ComEthernetIRC::processIRCstr() {
       sReturnCommand = strstr( sReturnCommand, ":")+1;
       if (sReturnCommand != NULL) {
         bAvailable = true;
+        return;
       }
     }
   }
+  clearVars();  
 }
 
 char* ComEthernetIRC::read() {
