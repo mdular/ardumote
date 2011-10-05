@@ -156,7 +156,7 @@ void Ardumote::processCommand() {
 
 
 void Ardumote::sendValueToComModules(int number, long value) {
-
+printAvailableMemory();
   char str[80];
   int j=0;
   
@@ -206,7 +206,7 @@ void Ardumote::sendValueToComModules(int number, long value) {
   for (int i = 0; i<numComModules; i++) {
     ComModules[i]->send(str);
   }
-
+printAvailableMemory();
 }
 
 char* Ardumote::n2chars(long number) {
