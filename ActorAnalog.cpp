@@ -14,9 +14,9 @@ bool ActorAnalog::exec(long p1) {
   if (p1>255) {
     analogWrite(nPin, 255);
   } else if (p1 <= 0) {
-    digitalWrite(nPin, 0);
+    analogWrite(nPin, 0);
   } else {
-    digitalWrite(nPin, p1);
+    analogWrite(nPin, p1);
   }
   return true;
 }
