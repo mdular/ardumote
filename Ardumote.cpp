@@ -36,11 +36,13 @@ void Ardumote::loop() {
   for (int i = 0; i<numComModules; i++) {
     if (ComModules[i]->available() ) {
       char* command = ComModules[i]->read();
+      /*
       Serial.print("Command (Mod #");
       Serial.print(i);
       Serial.print("): ");
       Serial.println( command );
       printAvailableMemory();    
+      */
       parseInCmd(command);
       processCommand();
     }
@@ -238,5 +240,5 @@ void Ardumote::printAvailableMemory() {
 }
 
 void Ardumote::log(char* sMsg) {
-  Serial.println(sMsg);
+  //Serial.println(sMsg);
 }
