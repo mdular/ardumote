@@ -7,6 +7,8 @@ class SensorModule {
     virtual bool available();
     virtual long getValue();
 
+  protected:
+    int nDeviceTypeID;
 };
 
 #endif

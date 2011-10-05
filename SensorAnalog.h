@@ -4,16 +4,13 @@
 class SensorAnalog : public SensorModule {
   
   public:
-    SensorAnalog();
-    
+    void setup(int nAnalogPin, unsigned int nIntervalSeconds);
     bool available();
     long getValue();
-
-    void setup(int nAnalogPin);
-    void setInterval(unsigned int nSeconds);
 
   private:
     unsigned int nIntervalMilliSeconds;
     int nPin;
     long nLastAvailable;
+
 };

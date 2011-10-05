@@ -1,16 +1,10 @@
 #include "SensorDigital.h"
 
-SensorDigital::SensorDigital() {
-  
-}
-
-void SensorDigital::setup(int nDigitalPin) {
+void SensorDigital::setup(int nDigitalPin, unsigned int nSeconds) {
   nPin = nDigitalPin;
   pinMode(nPin, INPUT);
-}
-
-void SensorDigital::setInterval(unsigned int nSeconds) {
   nIntervalMilliSeconds = nSeconds*1000;
+  nDeviceTypeID = 2;
 }
 
 bool SensorDigital::available() {
