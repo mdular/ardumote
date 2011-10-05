@@ -4,13 +4,9 @@
 class SensorDigital: public SensorModule {
   
   public:
-    SensorDigital();
-
+    void setup(int nDigitalPin, unsigned int nIntervalSeconds);
     bool available();
     long getValue();
-
-    void setup(int nDigitalPin);
-    void setInterval(unsigned int nSeconds);
 
   private:
     unsigned int nIntervalMilliSeconds;

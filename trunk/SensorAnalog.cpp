@@ -1,16 +1,10 @@
 #include "SensorAnalog.h"
 
-SensorAnalog::SensorAnalog() {
-  
-}
-
-void SensorAnalog::setup(int nAnalogPin) {
+void SensorAnalog::setup(int nAnalogPin, unsigned int nSeconds) {
   nPin = nAnalogPin;
   pinMode(nPin, INPUT);
-}
-
-void SensorAnalog::setInterval(unsigned int nSeconds) {
   nIntervalMilliSeconds = nSeconds*1000;
+  nDeviceTypeID = 1;
 }
 
 bool SensorAnalog::available() {
