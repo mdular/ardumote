@@ -60,7 +60,7 @@ void setup() {
   c1.setup();
   myArdumote.addComModule(&c1);
   
-  c2.setup(5);
+  c2.setup(13);        // LED on Pin 13 indicates Connection Status
   myArdumote.addComModule(&c2);
  
   // === Sensors ===
@@ -71,15 +71,15 @@ void setup() {
   myArdumote.addSensorModule( &s2 );
   
   // === Actors ===
-/*  a1.setup(5);
-  myArdumote.addActorModule( &a1 ); */
-
-  a2.setup(6);
+  a2.setup("LED Digital Red", 6);
   myArdumote.addActorModule( &a2 );
 
-  a3.setup(7);
+  a3.setup("RCSwitch", 7);
   myArdumote.addActorModule( &a3 );
 
+  a1.setup("LED PWM Blue", 5);
+  myArdumote.addActorModule( &a1 );
+  
   Serial.println("setup done");
 }
 
