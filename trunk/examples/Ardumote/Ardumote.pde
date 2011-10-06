@@ -57,17 +57,17 @@ void setup() {
   myArdumote.addActorModule( &a0 );  
 
   // === ComModules ===
-  c1.setup();
-  myArdumote.addComModule(&c1);
+//  c1.setup();
+//  myArdumote.addComModule(&c1);
   
   c2.setup(13);        // LED on Pin 13 indicates Connection Status
   myArdumote.addComModule(&c2);
  
   // === Sensors ===
-  s1.setup("LDR Light", A0, 600);
+  s1.setup("LDR Light", A0, 10);
   myArdumote.addSensorModule( &s1 );
 
-  s2.setup("LM35 Temperature", A1, 600);
+  s2.setup("LM35 Temperature", A1, 10);
   myArdumote.addSensorModule( &s2 );
   
   // === Actors ===
