@@ -1,10 +1,6 @@
 #include "WProgram.h"
 #include "ActorAnalog.h"
 
-ActorAnalog::ActorAnalog() {
-  
-}
-
 void ActorAnalog::setup(int nDigitalPin) {
   nPin = nDigitalPin;
   pinMode(nPin, OUTPUT);

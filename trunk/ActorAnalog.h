@@ -3,8 +3,6 @@
 class ActorAnalog : public ActorModule {
   
   public:
-    ActorAnalog(); 
-    
     bool exec(long p1);
     void setup(int nDigitalPin);
 
