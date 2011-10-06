@@ -32,10 +32,12 @@ ComSerial         c1;
 ComEthernetIRC    c2;
 
 SensorAnalog      s1;
+SensorAnalog      s2;
+
 
 ActorAnalog       a1;
-ActorAnalog       a2;
-ActorDigital      a3;
+ActorDigital      a2;
+ActorRCSwitch     a3;
 
 ArdumotePlain myArdumote;
 
@@ -55,18 +57,22 @@ void setup() {
   myArdumote.addActorModule( &a0 );  
 
   // === ComModules ===
-  //myArdumote.addComModule(&c1);
+  c1.setup();
+  myArdumote.addComModule(&c1);
   
-  c2.setup();
+  c2.setup(5);
   myArdumote.addComModule(&c2);
  
   // === Sensors ===
-  s1.setup(A1, 10);
+  s1.setup("LDR Light", A0, 600);
   myArdumote.addSensorModule( &s1 );
 
+  s2.setup("LM35 Temperature", A1, 600);
+  myArdumote.addSensorModule( &s2 );
+  
   // === Actors ===
-  a1.setup(5);
-  myArdumote.addActorModule( &a1 );
+/*  a1.setup(5);
+  myArdumote.addActorModule( &a1 ); */
 
   a2.setup(6);
   myArdumote.addActorModule( &a2 );
