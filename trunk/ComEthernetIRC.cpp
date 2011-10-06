@@ -8,7 +8,9 @@ ComEthernetIRC::ComEthernetIRC() {
 
 }
 
-void ComEthernetIRC::setup() {
+void ComEthernetIRC::setup(int nLedPin) {
+  pinMode(nLedPin, OUTPUT);
+  nStatusLEDPin = nLedPin;
   connect();
 }
 
@@ -16,12 +18,13 @@ void ComEthernetIRC::clearVars() {
   nInBufferPos = 0;
   sInBuffer[0] = '\0';
   bAvailable = false; 
+  bReady = false;
 }
 
 void ComEthernetIRC::connect() {
   clearVars();
   for (int i = 0; i<10; i++) {
-    randomSeed(analogRead(0));
+    randomSeed(analogRead(A0)+analogRead(A1)+analogRead(A2)+analogRead(A3)+analogRead(A4)+analogRead(A5));
     myNick[i] = (char)random(65,90);
   }
   myNick[10] = '\0';
@@ -46,6 +49,13 @@ bool ComEthernetIRC::available() {
         char c = client.read();
         if (c == '\n') {
           sInBuffer[nInBufferPos] = '\0';
+          if (strstr(sInBuffer, "376") != NULL) {
+            sInBuffer[0] = 'c'; sInBuffer[1] = 'o'; sInBuffer[2] = 'n'; sInBuffer[3] = '\0'; 
+            setStatus(true);
+            sReturnCommand = "con";
+            bAvailable = true;
+            return true;
+          }
           processIRCstr();
           return bAvailable;
         } else if (c!='\r') {
@@ -56,6 +66,7 @@ bool ComEthernetIRC::available() {
         clearVars();
       }      
     } else {
+      setStatus(false);
       client.stop();
       delay(5000);
       connect();
@@ -96,8 +107,18 @@ bool ComEthernetIRC::send(char* sCommand) {
       client.print("PRIVMSG ardumote :");
       client.println(sCommand);
     } else {
+      setStatus(false);
       client.stop();
       delay(5000);
       connect();
     }
+}
+
+void ComEthernetIRC::setStatus(bool status) {
+  if (status) {
+    digitalWrite(nStatusLEDPin, HIGH);
+  } else {
+    digitalWrite(nStatusLEDPin, LOW);
+  }
+  bReady = status;
 }

@@ -37,6 +37,32 @@ void Ardumote::loop() {
   for (int i = 0; i<numComModules; i++) {
     if (ComModules[i]->available() ) {
       char* command = ComModules[i]->read();
+      if (command[0] == 'c') {
+        for (int k = 1; k<numSensorModules; k++) {
+          char str[25];
+          char* x;
+          int j = 0;
+          x = n2chars(k);
+          for (int i = 0; i<strlen(x); i++) {
+            str[j++] = x[i];
+          }
+          str[j++] = '*';
+          x = n2chars(SensorModules[k]->nDeviceTypeID);
+          for (int i = 0; i<strlen(x); i++) {
+            str[j++] = x[i];
+          }
+          str[j++] = '*';
+          x = SensorModules[k]->getName();
+          for (int i = 0; i<strlen(x); i++) {
+            str[j++] = x[i];
+          }
+          str[j++] = '\0';
+          
+          sendValueToComModules(0, str);
+          //ComModules[i]->send( SensorModules[j]->getName() );
+          Serial.println( str);
+        }
+      } else {
       /*
       Serial.print("Command (Mod #");
       Serial.print(i);
@@ -44,8 +70,9 @@ void Ardumote::loop() {
       Serial.println( command );
       printAvailableMemory();    
       */
-      parseInCmd(command);
-      processCommand();
+        parseInCmd(command);
+        processCommand();
+      }
     }
   }
   // Sensor
@@ -154,9 +181,19 @@ void Ardumote::processCommand() {
   }
 }
 
-
 void Ardumote::sendValueToComModules(int number, long value) {
+  char* x = n2chars(value);
+  sendValueToComModules(number, x);
+}
+
+void Ardumote::sendValueToComModules(int number, char* value) {
 printAvailableMemory();
+  char tmp[30];
+  if (strlen(value)<30) {
+    strcpy(tmp, value);
+  } else {
+    tmp[0] = '\0';
+  }
   char str[80];
   int j=0;
   
@@ -188,9 +225,9 @@ printAvailableMemory();
   str[j++] = '*';
 
   // Value
-  x = n2chars(value);
-  for (int i = 0; i<strlen(x); i++) {
-    str[j++] = x[i];
+  //x = n2chars(value);
+  for (int i = 0; i<strlen(tmp); i++) {
+    str[j++] = tmp[i];
   }
   str[j++] = '*';
   str[j] = '\0';

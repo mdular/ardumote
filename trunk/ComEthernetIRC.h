@@ -8,15 +8,17 @@ class ComEthernetIRC: public ComModule {
   public:
     ComEthernetIRC();
     
-    void setup();
+    void setup(int nStatusPin);
     bool available();
     char* read();
     bool send(char* sCommand); 
 
   private:
+ 
     char sInBuffer[201];
     int  nInBufferPos;
     bool bAvailable;
+    bool bReady;
     
     char* sReturnCommand;
 
@@ -24,5 +26,6 @@ class ComEthernetIRC: public ComModule {
     char myNick[11];
     void processIRCstr();
     void clearVars();
-
+    void setStatus(bool status);
+    int nStatusLEDPin;
 };

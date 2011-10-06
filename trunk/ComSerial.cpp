@@ -6,6 +6,8 @@ ComSerial::ComSerial() {
    sReturnCommand[0] = '\0';
 }
 
+void ComSerial::setup() {
+}
 
 bool ComSerial::available() {
     if (bAvailable) {

@@ -22,6 +22,7 @@ class Ardumote {
     virtual char* getHash(char* strToHash);
 
     void sendValueToComModules(int number, long value);
+    void sendValueToComModules(int number, char* value);
     void processCommand();
   
     ComModule*    ComModules[3];

@@ -5,7 +5,7 @@ class ComSerial : public ComModule {
   
   public:
     ComSerial();
-    
+    void setup();    
     bool available();
     char* read();
     bool send(char* sCommand); 

@@ -1,6 +1,6 @@
 #include "SensorDigital.h"
 
-void SensorDigital::setup(int nDigitalPin, unsigned int nSeconds) {
+void SensorDigital::setup(char* sName, int nDigitalPin, unsigned int nSeconds) {
   nPin = nDigitalPin;
   pinMode(nPin, INPUT);
   nIntervalMilliSeconds = nSeconds*1000;
