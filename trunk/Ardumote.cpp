@@ -39,9 +39,10 @@ void Ardumote::loop() {
       char* command = ComModules[i]->read();
       if (command[0] == 'c') {
         for (int k = 1; k<numSensorModules; k++) {
-          char str[25];
+          char str[30];
           char* x;
           int j = 0;
+          str[j++] = 's'; str[j++] = '*'; 
           x = n2chars(k);
           for (int i = 0; i<strlen(x); i++) {
             str[j++] = x[i];
@@ -62,6 +63,32 @@ void Ardumote::loop() {
           //ComModules[i]->send( SensorModules[j]->getName() );
           Serial.println( str);
         }
+        for (int k = 1; k<numActorModules; k++) {
+          char str[30];
+          char* x;
+          int j = 0;
+          str[j++] = 'a'; str[j++] = '*';           
+          x = n2chars(k);
+          for (int i = 0; i<strlen(x); i++) {
+            str[j++] = x[i];
+          }
+          str[j++] = '*';
+          x = n2chars(ActorModules[k]->nDeviceTypeID);
+          for (int i = 0; i<strlen(x); i++) {
+            str[j++] = x[i];
+          }
+          str[j++] = '*';
+          x = ActorModules[k]->getName();
+          for (int i = 0; i<strlen(x); i++) {
+            str[j++] = x[i];
+          }
+          str[j++] = '\0';
+          
+          sendValueToComModules(0, str);
+          //ComModules[i]->send( SensorModules[j]->getName() );
+          Serial.println( str);
+        }
+
       } else {
       /*
       Serial.print("Command (Mod #");

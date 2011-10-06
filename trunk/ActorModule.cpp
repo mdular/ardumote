@@ -1,6 +1,20 @@
 #include "WProgram.h"
 #include "ActorModule.h"
 
+void ActorModule::setName(char* name) {
+  int i = 0;
+  while (i<20 && i<strlen(name)) {
+    sName[i] = name[i];
+    i++;
+  }
+  sName[i] = '\0';
+  Serial.println(sName);
+}
+
+char* ActorModule::getName() {
+  return sName;
+}
+
 bool ActorModule::exec(long p1) {
   Serial.println("Super Class Call to exec (1)");
 }

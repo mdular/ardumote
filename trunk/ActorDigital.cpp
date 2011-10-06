@@ -1,9 +1,11 @@
 #include "WProgram.h"
 #include "ActorDigital.h"
 
-void ActorDigital::setup(int nDigitalPin) {
+void ActorDigital::setup(char* sName, int nDigitalPin) {
+  setName(sName);
   nPin = nDigitalPin;
   pinMode(nPin, OUTPUT);
+  nDeviceTypeID = 5;
 }
 
 bool ActorDigital::exec(long p1) {

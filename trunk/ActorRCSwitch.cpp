@@ -1,9 +1,11 @@
 #include "WProgram.h"
 #include "ActorRCSwitch.h"
 
-void ActorRCSwitch::setup(int nDigitalPin) {
+void ActorRCSwitch::setup(char* sName, int nDigitalPin) {
+  setName(sName);
   mySwitch.enableTransmit(nDigitalPin);
   mySwitch.setPulseLength(320);
+  nDeviceTypeID = 6;
 }
 
 bool ActorRCSwitch::exec(long p1) {
