@@ -1,6 +1,7 @@
 #include "SensorAnalog.h"
 
-void SensorAnalog::setup(int nAnalogPin, unsigned int nSeconds) {
+void SensorAnalog::setup(char* sName, int nAnalogPin, unsigned int nSeconds) {
+  setName(sName);
   nPin = nAnalogPin;
   pinMode(nPin, INPUT);
   nIntervalMilliSeconds = nSeconds*1000;

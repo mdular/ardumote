@@ -4,7 +4,7 @@
 class SensorDigital: public SensorModule {
   
   public:
-    void setup(int nDigitalPin, unsigned int nIntervalSeconds);
+    void setup(char* sName, int nDigitalPin, unsigned int nIntervalSeconds);
     bool available();
     long getValue();
 

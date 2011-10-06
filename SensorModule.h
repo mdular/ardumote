@@ -6,9 +6,12 @@ class SensorModule {
   public:
     virtual bool available();
     virtual long getValue();
+    char* getName();
+    int nDeviceTypeID;
 
   protected:
-    int nDeviceTypeID;
+    char sName[21];
+    void setName(char* name);
 };
 
 #endif

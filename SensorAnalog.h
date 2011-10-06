@@ -4,7 +4,7 @@
 class SensorAnalog : public SensorModule {
   
   public:
-    void setup(int nAnalogPin, unsigned int nIntervalSeconds);
+    void setup(char* sName, int nAnalogPin, unsigned int nIntervalSeconds);
     bool available();
     long getValue();
 
