@@ -37,7 +37,9 @@ void Ardumote::loop() {
   for (int i = 0; i<numComModules; i++) {
     if (ComModules[i]->available() ) {
       char* command = ComModules[i]->read();
+      
       if (command[0] == 'c') {
+/*      
         for (int k = 1; k<numSensorModules; k++) {
           char str[30];
           char* x;
@@ -88,7 +90,7 @@ void Ardumote::loop() {
           //ComModules[i]->send( SensorModules[j]->getName() );
           Serial.println( str);
         }
-
+*/
       } else {
       /*
       Serial.print("Command (Mod #");
@@ -214,7 +216,7 @@ void Ardumote::sendValueToComModules(int number, long value) {
 }
 
 void Ardumote::sendValueToComModules(int number, char* value) {
-printAvailableMemory();
+Serial.println(freeMemory());
   char tmp[30];
   if (strlen(value)<30) {
     strcpy(tmp, value);
@@ -270,7 +272,7 @@ printAvailableMemory();
   for (int i = 0; i<numComModules; i++) {
     ComModules[i]->send(str);
   }
-printAvailableMemory();
+Serial.println(freeMemory());
 }
 
 char* Ardumote::n2chars(long number) {
@@ -291,18 +293,6 @@ char* Ardumote::getHash(char* strToHash) {
 
 
 
-
-void Ardumote::printAvailableMemory() {
-  int size = 2048; // Use 2048 with ATmega328
-  byte *buf;
-
-  while ((buf = (byte *) malloc(--size)) == NULL)
-    ;
-
-  free(buf);
-  Serial.print("Memory: ");
-  Serial.println(size);
-}
 
 void Ardumote::log(char* sMsg) {
   Serial.println(sMsg);

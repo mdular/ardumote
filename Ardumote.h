@@ -5,6 +5,7 @@
 #include <ComModule.h>
 #include <SensorModule.h>
 #include <ActorModule.h>
+#include <MemoryFree.h>
 
 #define DEBUG true
  
@@ -40,7 +41,6 @@ class Ardumote {
   
     char* n2chars(long number);
     char* n2chars(int number);
-    void printAvailableMemory();
     void log(char* sMsg);
     void parseInCmd(char* command);
     
