@@ -62,7 +62,7 @@ bool ComEthernetIRC::available() {
           sInBuffer[nInBufferPos++] = c;
         }
       }
-      if (nInBufferPos > 201) {
+      if (nInBufferPos > 200) {
         clearVars();
       }      
     } else {
