@@ -10,7 +10,7 @@ class SensorModule {
     int nDeviceTypeID;
 
   protected:
-    char sName[21];
+    char sName[11];
     void setName(char* name);
 };
 

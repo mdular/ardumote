@@ -13,6 +13,10 @@ bool SensorAnalog::available() {
 }
 
 long SensorAnalog::getValue() {
+  long value = 0;
+  for (int i = 0; i<10; i++) {
+    value += analogRead(nPin);
+  }
   nLastAvailable = millis();
-  return analogRead(nPin);
+  return round(value/10);
 }

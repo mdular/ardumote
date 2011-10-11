@@ -39,7 +39,7 @@ void Ardumote::loop() {
       char* command = ComModules[i]->read();
       
       if (command[0] == 'c') {
-/*      
+      
         for (int k = 1; k<numSensorModules; k++) {
           char str[30];
           char* x;
@@ -90,7 +90,7 @@ void Ardumote::loop() {
           //ComModules[i]->send( SensorModules[j]->getName() );
           Serial.println( str);
         }
-*/
+
       } else {
       /*
       Serial.print("Command (Mod #");
