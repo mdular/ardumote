@@ -1,6 +1,6 @@
 #include "Ardumote.h"
 #include <Time.h>
-#include "WProgram.h"
+#include "Arduino.h"
   
 Ardumote::Ardumote() {
   numComModules    = 0;

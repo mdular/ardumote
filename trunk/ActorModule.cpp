@@ -1,4 +1,4 @@
-#include "WProgram.h"
+#include "Arduino.h"
 #include "ActorModule.h"
 
 void ActorModule::setName(char* name) {

@@ -1,4 +1,4 @@
-#include "WProgram.h"
+#include "Arduino.h"
 #include <ComModule.h>
 
 class ComSerial : public ComModule {

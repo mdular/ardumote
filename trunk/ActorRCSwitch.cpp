@@ -1,4 +1,4 @@
-#include "WProgram.h"
+#include "Arduino.h"
 #include "ActorRCSwitch.h"
 
 void ActorRCSwitch::setup(char* sName, int nDigitalPin) {

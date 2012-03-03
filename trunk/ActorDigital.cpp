@@ -1,4 +1,4 @@
-#include "WProgram.h"
+#include "Arduino.h"
 #include "ActorDigital.h"
 
 void ActorDigital::setup(char* sName, int nDigitalPin) {
