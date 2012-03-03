@@ -1,6 +1,6 @@
 #include "ComEthernetHTTP.h"
 
-Server xserver(80);
+EthernetServer xserver(80);
 
 ComEthernetHTTP::ComEthernetHTTP() {
   
@@ -15,7 +15,7 @@ void ComEthernetHTTP::setup(byte mac[6], byte ip[4], byte remoteIp[4]) {
 }
 
 bool ComEthernetHTTP::available() {
-  Client client = xserver.available();
+  EthernetClient client = xserver.available();
   if (client) {
     int nCommandPos=-1;
     sReturnCommand[0] = '\0';
@@ -59,8 +59,8 @@ return "aaa";
 }
 
 bool ComEthernetHTTP::send(char* sCommand) {
-  Client client(serverIP, 80);
-  if (client.connect()) {
+  EthernetClient client;
+  if (client.connect(serverIP, 80)) {
     client.print("GET /input.php?d=");
     client.print( sCommand );
     client.println(" HTTP/1.0");

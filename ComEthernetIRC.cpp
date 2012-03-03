@@ -1,8 +1,8 @@
 #include "ComEthernetIRC.h"
-#include "WProgram.h"
+#include "Arduino.h"
 
 byte yserver[] = { 78,47,112,60};
-Client client ( yserver, 6667);
+EthernetClient client;// ( yserver, 6667);
 
 ComEthernetIRC::ComEthernetIRC() {
 
@@ -29,7 +29,7 @@ void ComEthernetIRC::connect() {
   }
   myNick[10] = '\0';
     
-  if (client.connect()) {
+  if (client.connect(yserver, 6667)) {
     client.print("NICK ");
     client.print(myNick);
     client.println();

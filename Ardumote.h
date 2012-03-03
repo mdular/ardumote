@@ -1,7 +1,7 @@
 #ifndef ardumote_h
 #define ardumote_h
 
-#include "WProgram.h"
+#include "Arduino.h"
 #include <ComModule.h>
 #include <SensorModule.h>
 #include <ActorModule.h>

@@ -1,4 +1,4 @@
-#include "WProgram.h"
+#include "Arduino.h"
 #include "ActorAnalog3.h"
 
 void ActorAnalog3::setup(char* sName, int nAnalogPin1, int nAnalogPin2, int nAnalogPin3) {
