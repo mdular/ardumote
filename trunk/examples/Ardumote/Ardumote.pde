@@ -32,7 +32,7 @@ byte ip[]      = { 192,168,0,11 };
 void setup() {
 
   Serial.begin(9600);
-  Ethernet.begin(mac, ip);
+  Ethernet.begin(mac);
   delay(1000);
 
   Serial.println("setup start");

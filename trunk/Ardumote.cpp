@@ -107,7 +107,7 @@ void Ardumote::loop() {
   // Sensor
   for (int i = 0; i<numSensorModules; i++) {
     if (SensorModules[i]->available()) {
-      int nV = SensorModules[i]->getValue();
+      long nV = SensorModules[i]->getValue();
       sendValueToComModules( i, nV );
     }
   }  
