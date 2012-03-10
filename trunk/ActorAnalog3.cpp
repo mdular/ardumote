@@ -13,9 +13,6 @@ void ActorAnalog3::setup(char* sName, int nAnalogPin1, int nAnalogPin2, int nAna
 }
 
 bool ActorAnalog3::exec(long p1, long p2, long p3) {
-Serial.print(p1); Serial.print("-");
-Serial.print(p2);Serial.print("-");
-Serial.print(p3);
   if (p1>255) {
     analogWrite(nPin1, 255);
   } else if (p1 <= 0) {

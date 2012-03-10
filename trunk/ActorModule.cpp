@@ -8,7 +8,6 @@ void ActorModule::setName(char* name) {
     i++;
   }
   sName[i] = '\0';
-  Serial.println(sName);
 }
 
 char* ActorModule::getName() {

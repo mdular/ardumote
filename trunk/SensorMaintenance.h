@@ -6,7 +6,9 @@ class SensorMaintenance: public SensorModule {
   public:
     void setup();
     bool available();
-    long getValue();
+    char* getValue();
 
   private:
+    long nLastAvailable;
+
 };
