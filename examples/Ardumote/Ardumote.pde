@@ -15,6 +15,7 @@
 // ===== Sensor Modules ==========
 #include <SensorAnalog.h>
 #include <SensorDigital.h>
+#include <SensorRCSwitch.h>
 // ===== Actor Modules ===========
 #include <ActorAnalog.h>
 #include <ActorDigital.h>
@@ -22,12 +23,10 @@
 // ===============================
 
 
-#define ARDUMOTE_CONTROLLER_ID 11
-#define ARDUMOTE_SHARED_SECRET "2d520b8f5ea2cf6113a578f57b45201c"
+#define ARDUMOTE_CONTROLLER_ID 33
+#define ARDUMOTE_SHARED_SECRET "efaa83d0d1f5456ee9fe99a8953fe653"
 
 byte mac[]     = {  0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-byte ip[]      = { 192,168,0,11 };
-
 
 void setup() {
 
@@ -50,25 +49,28 @@ void setup() {
   // ======= /Maintenance Modules ======================================================================
 
   // ====== ComModules =================================================================================
+    ComSerial c1;  
+    myArdumote.addComModule(&c1);
+
     ComEthernetIRC c2;  
     c2.setup(13);                          // LED on pin 13 indicates Connection Status
     myArdumote.addComModule(&c2);
   // ====== /ComModules ================================================================================
 
   // ===== Sensors =====================================================================================
-    SensorAnalog s1;
-    s1.setup("myLDR", A0, 10);         // LDR connected to analog pin 0 polling value every 10 seconds
+    SensorRCSwitch s1;
+    s1.setup("RCSwitch R.", 0);         // LDR connected to analog pin 0 polling value every 10 seconds
     myArdumote.addSensorModule( &s1 );
+
+    SensorAnalog s2;
+    s2.setup("Analog", A0, 5);         // LDR connected to analog pin 0 polling value every 10 seconds
+    myArdumote.addSensorModule( &s2 );
   // ===== /Sensors ===================================================================================
 
   // ==== Actors ======================================================================================
-    ActorAnalog a1;
-    a1.setup("myLED PWM", 5);           // A LED connected to pin 5
+    ActorRCSwitch a1;
+    a1.setup("RCSwitch S.", 5);           // A LED connected to pin 5
     myArdumote.addActorModule( &a1 );
-
-    ActorDigital a2;
-    a2.setup("myLED", 6);           // A LED connected to pin 6
-    myArdumote.addActorModule( &a2 );
   // ==== /Actors =====================================================================================
 
   
@@ -82,4 +84,3 @@ void setup() {
 
 void loop() {
 }
-
