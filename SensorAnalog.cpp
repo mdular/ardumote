@@ -12,11 +12,13 @@ bool SensorAnalog::available() {
   return (millis()-nLastAvailable) >= nIntervalMilliSeconds;
 }
 
-long SensorAnalog::getValue() {
+char* SensorAnalog::getValue() {
   long value = 0;
   for (int i = 0; i<10; i++) {
     value += analogRead(nPin);
   }
   nLastAvailable = millis();
-  return round(value/10);
+  char* buf = "123456789012345"; 
+  ltoa(round(value/10), buf, 10);
+  return buf;
 }

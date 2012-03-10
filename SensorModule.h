@@ -5,7 +5,7 @@ class SensorModule {
   
   public:
     virtual bool available();
-    virtual long getValue();
+    virtual char* getValue();
     char* getName();
     int nDeviceTypeID;
 

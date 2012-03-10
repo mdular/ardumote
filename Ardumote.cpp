@@ -62,8 +62,6 @@ void Ardumote::loop() {
           str[j++] = '\0';
           
           sendValueToComModules(0, str);
-          //ComModules[i]->send( SensorModules[j]->getName() );
-          Serial.println( str);
         }
         for (int k = 1; k<numActorModules; k++) {
           char str[30];
@@ -87,18 +85,9 @@ void Ardumote::loop() {
           str[j++] = '\0';
           
           sendValueToComModules(0, str);
-          //ComModules[i]->send( SensorModules[j]->getName() );
-          Serial.println( str);
         }
 
       } else {
-      /*
-      Serial.print("Command (Mod #");
-      Serial.print(i);
-      Serial.print("): ");
-      Serial.println( command );
-      printAvailableMemory();    
-      */
         parseInCmd(command);
         processCommand();
       }
@@ -107,10 +96,10 @@ void Ardumote::loop() {
   // Sensor
   for (int i = 0; i<numSensorModules; i++) {
     if (SensorModules[i]->available()) {
-      long nV = SensorModules[i]->getValue();
+      char* nV = SensorModules[i]->getValue();
       sendValueToComModules( i, nV );
     }
-  }  
+  }
 }
 
 void Ardumote::parseInCmd(char* sCmd) {
@@ -130,14 +119,6 @@ void Ardumote::parseInCmd(char* sCmd) {
     }
     pch = strtok (NULL, "*");
   }
-
-  /*
-  for (int i = 0; i<10; i++) {
-    Serial.print(i);
-    Serial.print(": ");
-    Serial.println(inCommand[i]);
-  }
-  */
   
 }
 
@@ -210,19 +191,8 @@ void Ardumote::processCommand() {
   }
 }
 
-void Ardumote::sendValueToComModules(int number, long value) {
-  char* x = n2chars(value);
-  sendValueToComModules(number, x);
-}
-
 void Ardumote::sendValueToComModules(int number, char* value) {
-Serial.println(freeMemory());
-  char tmp[30];
-  if (strlen(value)<30) {
-    strcpy(tmp, value);
-  } else {
-    tmp[0] = '\0';
-  }
+
   char str[80];
   int j=0;
   
@@ -254,9 +224,8 @@ Serial.println(freeMemory());
   str[j++] = '*';
 
   // Value
-  //x = n2chars(value);
-  for (int i = 0; i<strlen(tmp); i++) {
-    str[j++] = tmp[i];
+  for (int i = 0; i<12 && value[i]!='\0'; i++) {
+    str[j++] = value[i];
   }
   str[j++] = '*';
   str[j] = '\0';
@@ -272,7 +241,6 @@ Serial.println(freeMemory());
   for (int i = 0; i<numComModules; i++) {
     ComModules[i]->send(str);
   }
-Serial.println(freeMemory());
 }
 
 char* Ardumote::n2chars(long number) {

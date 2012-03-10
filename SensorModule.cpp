@@ -8,14 +8,13 @@ void SensorModule::setName(char* name) {
     i++;
   }
   sName[i] = '\0';
-  Serial.println(sName);
 }
 
 char* SensorModule::getName() {
   return sName;
 }
 
-long SensorModule::getValue() {
+char* SensorModule::getValue() {
   Serial.println("Super Class Call to getValue");
 }
 

@@ -12,7 +12,11 @@ bool SensorDigital::available() {
   return (millis()-nLastAvailable) >= nIntervalMilliSeconds;
 }
 
-long SensorDigital::getValue() {
+char* SensorDigital::getValue() {
   nLastAvailable = millis();
-  return digitalRead(nPin);
+  if (digitalRead(nPin)) {
+    return "1";
+  } else {
+	return "0";
+  }
 }

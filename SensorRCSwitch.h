@@ -7,7 +7,8 @@ class SensorRCSwitch: public SensorModule {
   public:
     void setup(char* sName, int nInterrupt);
     bool available();
-    long getValue();
+    char* getValue();
+	
   private:
     RCSwitch mySwitch;
 };
