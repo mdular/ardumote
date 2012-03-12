@@ -52,9 +52,9 @@ void setup() {
     ComSerial c1;  
     myArdumote.addComModule(&c1);
 
-    ComEthernetIRC c2;  
-    c2.setup(13);                          // LED on pin 13 indicates Connection Status
-    myArdumote.addComModule(&c2);
+//    ComEthernetIRC c2;  
+//    c2.setup(13);                          // LED on pin 13 indicates Connection Status
+//    myArdumote.addComModule(&c2);
   // ====== /ComModules ================================================================================
 
   // ===== Sensors =====================================================================================
@@ -69,7 +69,7 @@ void setup() {
 
   // ==== Actors ======================================================================================
     ActorRCSwitch a1;
-    a1.setup("RCSwitch S.", 5);           // A LED connected to pin 5
+    a1.setup("RCSwitch S.", 10);           // A LED connected to pin 5
     myArdumote.addActorModule( &a1 );
   // ==== /Actors =====================================================================================
 

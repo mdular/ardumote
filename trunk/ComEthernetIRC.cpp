@@ -106,6 +106,10 @@ bool ComEthernetIRC::send(char* sCommand) {
     if (client.connected()) {
       client.print("PRIVMSG ardumote :");
       client.println(sCommand);
+
+      client.print("PRIVMSG #test :");
+      client.println(sCommand);
+	  
     } else {
       setStatus(false);
       client.stop();
