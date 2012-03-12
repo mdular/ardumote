@@ -3,7 +3,11 @@
 
 void ActorRCSwitch::setup(char* sName, int nDigitalPin) {
   setName(sName);
+  pinMode(nDigitalPin, OUTPUT);
+  digitalWrite(nDigitalPin, LOW);
   mySwitch.enableTransmit(nDigitalPin);
+  Serial.print("Setup RC on pin ");
+  Serial.println(nDigitalPin);
   mySwitch.setPulseLength(320);
   nDeviceTypeID = 6;
 }
