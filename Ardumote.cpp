@@ -129,6 +129,8 @@ void Ardumote::processCommand() {
   // Protocol Version
   if (atoi(inCommand[0]) != nProtocolVersion) {
     log("Version failed");
+	Serial.println(inCommand[0]);
+	Serial.println(nProtocolVersion);
     return;
   }
   
@@ -174,7 +176,7 @@ void Ardumote::processCommand() {
     log("AuthString failed");
     return;
   }
-
+ log("everything fine");
   
   if (nParamCount == 5) {
     ActorModules[ nActorID ]->exec( aParams[0], aParams[1], aParams[2], aParams[3], aParams[4] );
@@ -182,6 +184,7 @@ void Ardumote::processCommand() {
     ActorModules[ nActorID ]->exec( aParams[0], aParams[1], aParams[2], aParams[3] );
   } else if (nParamCount == 3) {
     ActorModules[ nActorID ]->exec( aParams[0], aParams[1], aParams[2] );
+	log("3 params");
   } else if (nParamCount == 2) {
     ActorModules[ nActorID ]->exec( aParams[0], aParams[1] );
   } else if (nParamCount == 1) {
@@ -189,6 +192,7 @@ void Ardumote::processCommand() {
   } else {
     log("no parameters");
   }
+  log("done");
 }
 
 void Ardumote::sendValueToComModules(int number, char* value) {
