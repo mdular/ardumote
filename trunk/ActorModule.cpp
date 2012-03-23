@@ -3,7 +3,7 @@
 
 void ActorModule::setName(char* name) {
   int i = 0;
-  while (i<10 && i<strlen(name)) {
+  while (i<20 && i<strlen(name)) {
     sName[i] = name[i];
     i++;
   }
