@@ -13,7 +13,7 @@ class ActorModule {
     virtual bool exec(long p1, long p2, long p3, long p4, long p5);
     int nDeviceTypeID;  
   protected:
-    char sName[11];
+    char sName[21];
 };
 
 #endif

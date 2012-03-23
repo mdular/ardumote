@@ -3,6 +3,8 @@
 #include <SPI.h>
 #include <Ethernet.h>
 #include <RCSwitch.h>
+#include <Servo.h>
+
 #include <Time.h>
 #include <ArdumotePlain.h>
 // ===== Maintenance Modules =====
@@ -20,6 +22,8 @@
 #include <ActorAnalog.h>
 #include <ActorDigital.h>
 #include <ActorRCSwitch.h>
+#include <ActorServo.h>
+
 // ===============================
 
 
@@ -52,25 +56,31 @@ void setup() {
     ComSerial c1;  
     myArdumote.addComModule(&c1);
 
-//    ComEthernetIRC c2;  
-//    c2.setup(13);                          // LED on pin 13 indicates Connection Status
-//    myArdumote.addComModule(&c2);
+    ComEthernetIRC c2;  
+    c2.setup(13);                          // LED on pin 13 indicates Connection Status
+    myArdumote.addComModule(&c2);
   // ====== /ComModules ================================================================================
 
   // ===== Sensors =====================================================================================
     SensorRCSwitch s1;
-    s1.setup("RCSwitch R.", 0);         // LDR connected to analog pin 0 polling value every 10 seconds
+    s1.setup("RCSwitch R.", 0);            // LDR connected to analog pin 0 polling value every 10 seconds
     myArdumote.addSensorModule( &s1 );
 
-    SensorAnalog s2;
-    s2.setup("Analog", A0, 5);         // LDR connected to analog pin 0 polling value every 10 seconds
-    myArdumote.addSensorModule( &s2 );
   // ===== /Sensors ===================================================================================
 
   // ==== Actors ======================================================================================
     ActorRCSwitch a1;
-    a1.setup("RCSwitch S.", 10);           // A LED connected to pin 5
+    a1.setup("RCSwitch S.", A1);
     myArdumote.addActorModule( &a1 );
+    
+    ActorServo a2;
+    a2.setup("Servo 1", 5);
+    myArdumote.addActorModule( &a2 );
+
+    ActorServo a3;
+    a3.setup("Servo 2", 4);
+    myArdumote.addActorModule( &a3 );
+
   // ==== /Actors =====================================================================================
 
   
