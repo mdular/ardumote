@@ -9,9 +9,22 @@ Ardumote::Ardumote() {
   nProtocolVersion = 0;
 }
 
-void Ardumote::setup(long nControllerID, char* secret) {
+void Ardumote::setup(long nControllerID, char* secret, int TXLED, int RXLED) {
   nArdumoteControllerID = nControllerID;
   sSecret = secret;
+  nTXLED = TXLED;
+  nRXLED = RXLED;
+  pinMode(nTXLED, OUTPUT);
+  pinMode(nRXLED, OUTPUT);
+  digitalWrite(nTXLED, LOW);
+  digitalWrite(nRXLED, LOW);
+
+  for (int i = 0; i<10; i++) {
+  digitalWrite(nTXLED, HIGH);
+  delay(100);
+  digitalWrite(nTXLED, LOW);
+  delay(100);
+  }  
 }
 
 void Ardumote::addComModule(ComModule* m) {
@@ -36,6 +49,7 @@ void Ardumote::loop() {
   // Com
   for (int i = 0; i<numComModules; i++) {
     if (ComModules[i]->available() ) {
+      digitalWrite(nRXLED, HIGH);
       char* command = ComModules[i]->read();
       
       if (command[0] == 'c') {
@@ -91,13 +105,17 @@ void Ardumote::loop() {
         parseInCmd(command);
         processCommand();
       }
+      digitalWrite(nRXLED, LOW);
     }
   }
   // Sensor
   for (int i = 0; i<numSensorModules; i++) {
+    
     if (SensorModules[i]->available()) {
+      digitalWrite(nTXLED, HIGH);
       char* nV = SensorModules[i]->getValue();
       sendValueToComModules( i, nV );
+      digitalWrite(nTXLED, LOW);
     }
   }
 }

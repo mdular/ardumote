@@ -13,7 +13,7 @@ class Ardumote {
 
   public:
     Ardumote();
-    void setup(long nControllerID, char* secret);
+    void setup(long nControllerID, char* secret, int TXLED, int RXLED);
     void addComModule(ComModule* m);
     void addSensorModule(SensorModule* m);
     void addActorModule(ActorModule* m);
@@ -45,6 +45,8 @@ class Ardumote {
     void parseInCmd(char* command);
     
     int nProtocolVersion;
+    int nRXLED;
+    int nTXLED;
 };
 
 
