@@ -5,7 +5,7 @@ void SensorMaintenance::setup() {
 }
 
 bool SensorMaintenance::available() {
-  return (millis()-nLastAvailable) >= 36000;
+  return (millis()-nLastAvailable) >= 16000;
 }
 
 char* SensorMaintenance::getValue() {

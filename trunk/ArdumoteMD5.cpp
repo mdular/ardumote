@@ -1,8 +1,8 @@
 #include "ArdumoteMD5.h"
 #include "MD5.c"
 
-void ArdumoteMD5::setup(long nControllerID, char* secret) {
-  Ardumote::setup(nControllerID, secret);
+void ArdumoteMD5::setup(long nControllerID, char* secret, int TXLED, int RXLED) {
+  Ardumote::setup(nControllerID, secret, TXLED, RXLED);
   nProtocolVersion = 2;
 }
 
