@@ -28,6 +28,7 @@ void ComEthernetIRC::connect() {
     myNick[i] = (char)random(65,90);
   }
   myNick[10] = '\0';
+
     
   if (client.connect(yserver, 6667)) {
     client.print("NICK ");

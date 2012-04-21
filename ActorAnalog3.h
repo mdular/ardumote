@@ -3,7 +3,7 @@
 class ActorAnalog3 : public ActorModule {
   
   public:
-    bool exec(long p1, long p2, long p3);
+    bool exec(char* p1);
     void setup(char* sName, int nAnalogPin1, int nAnalogPin2, int nAnalogPin3);
 
   private:

@@ -8,7 +8,8 @@ void ActorAnalog::setup(char* sName, int nDigitalPin) {
   nDeviceTypeID = 4;
 }
 
-bool ActorAnalog::exec(long p1) {
+bool ActorAnalog::exec(char* p) {
+  int p1 = atoi(p);
   if (p1>255) {
     analogWrite(nPin, 255);
   } else if (p1 <= 0) {

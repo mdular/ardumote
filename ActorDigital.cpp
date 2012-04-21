@@ -8,8 +8,8 @@ void ActorDigital::setup(char* sName, int nDigitalPin) {
   nDeviceTypeID = 5;
 }
 
-bool ActorDigital::exec(long p1) {
-  if (p1>0) {
+bool ActorDigital::exec(char* p1) {
+  if (p1!="0") {
     digitalWrite(nPin, HIGH);
   } else {
     digitalWrite(nPin, LOW);

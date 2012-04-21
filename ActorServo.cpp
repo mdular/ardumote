@@ -7,33 +7,48 @@ void ActorServo::setup(char* sName, int nDigitalPin) {
   nDeviceTypeID = 8;
 }
 
-bool ActorServo::exec(long p1, long p2, long p3) {
-
+bool ActorServo::exec(char* p1) {
+  int params[3];
+  int paramCount = 0;
+  char* pch;
+  
+  pch = strtok (p1, ",");
+  while (pch != NULL)  {
+    params[paramCount++] = atoi(pch);
+    Serial.print(pch);
+    Serial.print(" ");
+    Serial.println(params[paramCount-1]);
+    pch = strtok (NULL, ",");    
+  }
+ 
+  
   myservo.attach(nPin);
   delay(500);
-  if (p1>179) {
+  if (params[0]>179) {
     myservo.write(179);
-  } else if (p1 <= 0) {
+  } else if (params[0] <= 0) {
     myservo.write(0);
   } else {
-    myservo.write(p1);
+    myservo.write(params[0]);
   }
 
   Serial.print("delay...");
-  Serial.println(p3);
-  delay(p3);
+  Serial.println(params[1]);
+  delay(params[1] * 1000);
 
   
-  if (p2>179) {
+  if (params[2]>179) {
     myservo.write(179);
-  } else if (p2 <= 0) {
+  } else if (params[2] <= 0) {
     myservo.write(0);
   } else {
-    myservo.write(p2);
+    myservo.write(params[2]);
   }
   delay(2000);
   myservo.detach();
 
   return true;
+  
+  
 }
 

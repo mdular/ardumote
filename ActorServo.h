@@ -4,7 +4,7 @@
 class ActorServo : public ActorModule {
   
   public:
-    bool exec(long p1, long p2, long p3);
+    bool exec(char* p1);
     void setup(char* sName, int nDigitalPin);
 
   private:

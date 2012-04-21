@@ -12,7 +12,24 @@ void ActorAnalog3::setup(char* sName, int nAnalogPin1, int nAnalogPin2, int nAna
   nDeviceTypeID = 7;
 }
 
-bool ActorAnalog3::exec(long p1, long p2, long p3) {
+bool ActorAnalog3::exec(char* p) {
+  int p1 = NULL;
+  int p2 = NULL;
+  int p3 = NULL;
+  char* pch;
+  
+  pch = strtok (p, ",");
+  while (pch != NULL)  {
+    if (p1==NULL) {
+        p1 = atoi(pch);
+    } else if (p2!=NULL) {
+        p2 = atoi(pch);
+    } else if (p3!=NULL) {
+        p3 = atoi(pch);
+    }
+    pch = strtok (NULL, ",");    
+  }
+
   if (p1>255) {
     analogWrite(nPin1, 255);
   } else if (p1 <= 0) {
