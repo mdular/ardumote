@@ -3,6 +3,6 @@
 void ActorMaintenance::setup() {
 }
 
-bool ActorMaintenance::exec(long p1) {
+bool ActorMaintenance::exec(char* p1) {
   return true;
 }

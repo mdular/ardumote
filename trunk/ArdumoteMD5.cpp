@@ -7,7 +7,8 @@ void ArdumoteMD5::setup(long nControllerID, char* secret, int TXLED, int RXLED) 
 }
 
 char* ArdumoteMD5::getHash(char* strToHash) {
-
+Serial.print("sth:");
+Serial.println(strToHash);
   unsigned char strToHashU[233];
   char* sReturnValue;
   

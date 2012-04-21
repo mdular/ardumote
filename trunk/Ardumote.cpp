@@ -171,16 +171,16 @@ void Ardumote::processCommand() {
   }
   
   // Params
-  int nParamCount = 0;
-  while (nParamCount < 5 && inCommand[4+nParamCount+1][0] != '\0') {
-    aParams[nParamCount] = atol( inCommand[4 + nParamCount] );
-    nParamCount++;
-  }
+  // inCommand[4] == params
+
+  // hash
+  // inCommand[5] == hash
+
   
   // Auth
   char strToHash[250];
   int k = 0;
-  for (int i = 0; i< 4+nParamCount; i++) {
+  for (int i = 0; i< 5; i++) {
     for (int j = 0; j<strlen(inCommand[i]); j++) {
       strToHash[k++] = inCommand[i][j];
     }
@@ -188,28 +188,15 @@ void Ardumote::processCommand() {
   }
   strToHash[k] = '\0';
   char* hash = this->getHash(strToHash);
-  if (strcmp(hash, inCommand[nParamCount+4]) != 0) {
+  if (strcmp(hash, inCommand[5]) != 0) {
     log(hash);
-    log(inCommand[nParamCount+4]);
+    log(inCommand[5]);
     log("AuthString failed");
     return;
   }
  log("everything fine");
   
-  if (nParamCount == 5) {
-    ActorModules[ nActorID ]->exec( aParams[0], aParams[1], aParams[2], aParams[3], aParams[4] );
-  } else if (nParamCount == 4) {
-    ActorModules[ nActorID ]->exec( aParams[0], aParams[1], aParams[2], aParams[3] );
-  } else if (nParamCount == 3) {
-    ActorModules[ nActorID ]->exec( aParams[0], aParams[1], aParams[2] );
-	log("3 params");
-  } else if (nParamCount == 2) {
-    ActorModules[ nActorID ]->exec( aParams[0], aParams[1] );
-  } else if (nParamCount == 1) {
-    ActorModules[ nActorID ]->exec( aParams[0] );
-  } else {
-    log("no parameters");
-  }
+  ActorModules[ nActorID ]->exec( inCommand[4] );
   log("done");
 }
 

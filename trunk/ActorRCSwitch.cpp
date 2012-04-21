@@ -12,7 +12,8 @@ void ActorRCSwitch::setup(char* sName, int nDigitalPin) {
   nDeviceTypeID = 6;
 }
 
-bool ActorRCSwitch::exec(long p1) {
-  mySwitch.send(p1, 24);
+bool ActorRCSwitch::exec(char* p1) {
+  long x = atol(p1);
+  mySwitch.send(x, 24);
   return true;
 }

@@ -3,7 +3,7 @@
 class ActorDigital : public ActorModule {
   
   public:
-    bool exec(long p1);
+    bool exec(char* p1);
     void setup(char* sName, int nDigitalPin);
     
   private:
