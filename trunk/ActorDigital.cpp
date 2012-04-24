@@ -9,10 +9,12 @@ void ActorDigital::setup(char* sName, int nDigitalPin) {
 }
 
 bool ActorDigital::exec(char* p1) {
-  if (p1!="0") {
+  if (atoi(p1)>0) {
     digitalWrite(nPin, HIGH);
   } else {
     digitalWrite(nPin, LOW);
   }
+  Serial.print("P:");
+  Serial.println(p1);
   return true;
 }

@@ -95,9 +95,11 @@ void Ardumote::loop() {
           x = ActorModules[k]->getName();
           for (int i = 0; i<strlen(x); i++) {
             str[j++] = x[i];
+            Serial.print(x[i]);
           }
+          Serial.println();
           str[j++] = '\0';
-          
+          Serial.println(str);
           sendValueToComModules(0, str);
         }
 
@@ -202,7 +204,7 @@ void Ardumote::processCommand() {
 
 void Ardumote::sendValueToComModules(int number, char* value) {
 
-  char str[80];
+  char str[110];
   int j=0;
   
   char* x;
@@ -233,7 +235,7 @@ void Ardumote::sendValueToComModules(int number, char* value) {
   str[j++] = '*';
 
   // Value
-  for (int i = 0; i<12 && value[i]!='\0'; i++) {
+  for (int i = 0; i<32 && value[i]!='\0'; i++) {
     str[j++] = value[i];
   }
   str[j++] = '*';
