@@ -1,3 +1,9 @@
+/*
+    http://www.ardumote.com
+    Copyright (c) 2012 Suat Özgür
+    http://opensource.org/licenses/MIT
+*/
+
 #include "SensorMaintenance.h"
 
 void SensorMaintenance::setup() {
