@@ -1,3 +1,9 @@
+/*
+    http://www.ardumote.com
+    Copyright (c) 2012 Suat Özgür
+    http://opensource.org/licenses/MIT
+*/
+
 #include "ComEthernetIRC.h"
 #include "Arduino.h"
 
@@ -36,7 +42,7 @@ void ComEthernetIRC::connect() {
     client.println();
     client.print("USER ardumote");
     client.print("1");
-    client.println(" 8 * : Suat Oezguer");
+    client.println(" 8 * : arduino");
     client.println("JOIN #test");
   } 
 }
