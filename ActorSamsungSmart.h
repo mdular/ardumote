@@ -4,16 +4,18 @@
     http://opensource.org/licenses/MIT
 */
 
-#include <ActorSamsungSmart.h>
+#include "Arduino.h"
+#include <Ethernet.h>
+#include <ActorModule.h>
+#include <Base64.h>
 
 class ActorSamsungSmart : public ActorModule {
   
   public:
     bool exec(char* p1);
-    void setup(char* sName, byte myMac[6], byte remoteIp[4]);
+    void setup(char* sName,  IPAddress server);
 
   private:
-    byte mac[6];
-	byte ip[4];
+	IPAddress srv;
 
 };
