@@ -7,46 +7,25 @@
 #include "Arduino.h"
 #include "ActorSamsungSmart.h"
 
-EthernetClient client;
-
-void ActorSamsungSmart::setup(char* sName, byte myMac[6], byte remoteIp[4]) {
+void ActorSamsungSmart::setup(char* sName, IPAddress server) {
   setName(sName);
   nDeviceTypeID = 24;
-  
-  ip[0] = remoteIp[0];
-  ip[1] = remoteIp[1];
-  ip[2] = remoteIp[2];
-  ip[3] = remoteIp[3];  
-
-  mac[0] = myMac[0];
-  mac[1] = myMac[1];
-  mac[2] = myMac[2];
-  mac[3] = myMac[3];  
-  mac[4] = myMac[4];  
-  mac[5] = myMac[5];  
-
+  srv=server; 
 }
 
-bool ActorSamsungSmart::exec(char* p) {
-  if (client.connect(yserver, 6667)) {
-
-  }
-}
-
-void ActorSamsungSmart::sendString(char* s) {
-    if (client.connected()) {
-        client.write( strlen(s) );
-        client.write( 0 );
-        client.print( s );
+bool ActorSamsungSmart::exec(char* cmd) {
+  EthernetClient client;
+  if (client.connect(srv, 55000)) {
+    uint8_t part1[] = {0,1,0,102,56,0,100,0,12,0,77,84,73,51,76,106,65,117,77,67,52,120,24,0,77,71,85,116,77,71,77,116,77,106,107,116,77,50,85,116,89,106,69,116,78,71,89,61,12,0,81,88,74,107,100,87,49,118,100,71,85,61,0,1,0,102,2,0,200,0,0,1,0,102,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    char text[100];    
+    base64_encode(text,cmd,strlen(cmd));
+    part1[74+0] = 5+strlen(text);
+    part1[74+5] = strlen(text);
+    for (int i = 0; i<strlen(text); i++) {
+      part1[74+7+i] = text[i];
     }
+    client.write(part1,74+7+strlen(text));
+    client.stop();
+  } 
 }
 
-void ActorSamsungSmart::sendInit() {
-    if (client.connected()) {
-    client.write(0);
-    client.print('foo');
-    sendString( 
-    $part1 =   chr(0x00) . generateString('foo') . generateString( chr(0x64) . chr(0x00) . generateString('MTI3LjAuMC4x') . generateString( base64_encode($mac) ) . generateString('QXJkdW1vdGU=') ) 
-			 . chr(0x00) . generateString('foo') . generateString( chr(0xc8) . chr(0x00) );
-    }
-}
