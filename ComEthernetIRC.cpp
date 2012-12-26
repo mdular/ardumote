@@ -7,7 +7,7 @@
 #include "ComEthernetIRC.h"
 #include "Arduino.h"
 
-byte yserver[] = { 78,47,112,60};
+char yserver[] = "irc.ardumote.com";
 EthernetClient client;// ( yserver, 6667);
 
 ComEthernetIRC::ComEthernetIRC() {
